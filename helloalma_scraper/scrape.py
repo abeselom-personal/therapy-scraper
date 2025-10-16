@@ -1151,7 +1151,7 @@ def main():
         logger.info(f"   • Output: Structured therapist data")
 
         logger.info("🌐 Beginning data scraping process...")
-        for i in range(40000):
+        for i in range(1):
             scraper.scrape_and_store(pages=i + 1, limit=15)
 
         logger.info("📊 Generating scraping statistics...")

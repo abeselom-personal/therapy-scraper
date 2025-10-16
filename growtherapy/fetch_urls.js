@@ -62,20 +62,29 @@ const formatPrice = (priceInCents) => {
 };
 
 // Function to format appointment slots (simplified version)
-const formatAppointmentSlots = (dateString) => {
-    if (!dateString) return '';
-
+const formatAppointmentSlots = async (shortid, state) => {
     try {
-        const date = new Date(dateString);
-        const day = date.toLocaleDateString('en-US', { weekday: 'short' });
-        const month = date.toLocaleDateString('en-US', { month: 'short' });
-        const dayNum = date.getDate();
+        const url = `https://growtherapy.com/_next/data/DhhhMBWA1wxym9qPcgVfC/en/book-appointment.json?prsid=${shortid}&ref=grow&insuranceType=Cash&insuranceId=&state=${state}&setting=Virtual&appointmentType=intake&searchId=f45bba5b-2f0c-4e29-b74d-des5fa370dee2`;
+        const res = await fetch(url);
+        const json = await res.json();
+        const provider = json.pageProps?.initialBookingPageProviderData?.provider;
+        if (!provider) return '';
 
-        // Generate random slots between 5-8 to match Excel format
-        const slots = Math.floor(Math.random() * 4) + 5;
+        const slotsByDay = {};
 
-        return `${day} - ${month} ${dayNum}: ${slots} slots (60 min)`;
-    } catch (error) {
+        for (const slot of provider.virtualSlots || []) {
+            const date = new Date(slot.start);
+            const dayStr = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            if (!slotsByDay[dayStr]) slotsByDay[dayStr] = 0;
+            slotsByDay[dayStr]++;
+        }
+
+        return Object.entries(slotsByDay)
+            .map(([day, count]) => `${day}: ${count} slot${count > 1 ? 's' : ''} (60 min)`)
+            .join('; ');
+
+    } catch (err) {
+        console.error(`[ERROR] Fetching appointment slots for ${shortid}:`, err.message);
         return '';
     }
 };
@@ -98,117 +107,94 @@ const fetchAllStates = async () => {
 
     for (const state of states) {
         console.log(`[DEBUG] Fetching state: ${state}`);
-        try {
-            const url = `${BASE_URL}&state=${encodeURIComponent(state)}`;
-            const res = await fetch(url);
-            const json = await res.json();
-            const providers = json.marketplaceData?.paginatedMarketplaceProviders?.providers || [];
-            console.log(`[DEBUG] Providers found in ${state}: ${providers.length}`);
+        let countOffset = 0;
+        let hasProviders = true;
 
-            for (const provider of providers) {
-                console.log(`[PROCESSING] ${providerCount}. ${provider.name} in ${state}`);
+        while (hasProviders) {
+            try {
+                const url = `${BASE_URL}&state=${encodeURIComponent(state)}&limit=50&countOffset=${countOffset}`;
+                const res = await fetch(url);
+                const json = await res.json();
+                const providers = json.marketplaceData?.paginatedMarketplaceProviders?.providers || [];
 
-                // Fetch NPI for each provider
-                const npiData = await fetchNPI(provider.name, state);
-                await sleep(500); // Be respectful to NPI API
+                if (providers.length === 0) {
+                    hasProviders = false;
+                    console.log(`[DEBUG] No more providers in ${state}, moving to next state.`);
+                    break;
+                }
 
-                const stateCode = getStateCodes(state);
-                const totalSlots = calculateTotalSlots();
+                console.log(`[DEBUG] Providers found in ${state} (offset ${countOffset}): ${providers.length}`);
 
-                const formattedProvider = {
-                    // Core identification - EXACTLY matching Excel columns
-                    'Url': `https://growtherapy.com/provider/${provider.shortId || provider.id}-${provider.name.toLowerCase().replace(/\s+/g, '-')}`,
-                    'Name': provider.name.toUpperCase(),
-                    'Profession': provider.license ? `Psychotherapy, ${provider.license}` : 'Psychotherapy',
-                    'Clinic Name': '',
+                for (const provider of providers) {
+                    console.log(`[PROCESSING] ${providerCount}. ${provider.name} in ${state}`);
+                    const npiData = await fetchNPI(provider.name, state);
+                    await sleep(500);
 
-                    // About the provider
-                    'Bio': (provider.description || '').replace(/\n/g, ' ').trim(),
-                    'Additional Focus Areas': provider.specialties?.slice(3).join(', ') || '', // Additional beyond top 3
-                    'Treatment Approaches': '', // Not available in this API
-                    'Appointment Types': 'Individual therapy', // Default assumption
-                    'Communities': '',
-                    'Age Groups': '',
-                    'Languages': '',
-                    'Highlights': [
-                        stateCode,
-                        'Verified by Grow Therapy',
-                        'Individual therapy',
-                        'Accepts insurance' // Default assumption
-                    ].filter(Boolean).join(', '),
+                    const stateCode = getStateCodes(state);
+                    const totalSlots = calculateTotalSlots();
 
-                    // Demographics
-                    'Gender': '',
-                    'Pronouns': provider.pronouns || '',
-                    'Race Ethnicity': '',
+                    const formattedProvider = {
+                        'Url': `https://growtherapy.com/provider/${provider.shortId || provider.id}-${provider.name.toLowerCase().replace(/\s+/g, '-')}`,
+                        'Name': provider.name.toUpperCase(),
+                        'Profession': provider.license ? `Psychotherapy, ${provider.license}` : 'Psychotherapy',
+                        'Clinic Name': '',
+                        'Bio': (provider.description || '').replace(/\n/g, ' ').trim(),
+                        'Additional Focus Areas': provider.specialties?.slice(3).join(', ') || '',
+                        'Treatment Approaches': '',
+                        'Appointment Types': 'Individual therapy',
+                        'Communities': '',
+                        'Age Groups': '',
+                        'Languages': '',
+                        'Highlights': [stateCode, 'Verified by Grow Therapy', 'Individual therapy', 'Accepts insurance'].filter(Boolean).join(', '),
+                        'Gender': '',
+                        'Pronouns': provider.pronouns || '',
+                        'Race Ethnicity': '',
+                        'Licenses': provider.license ? `Licensed ${provider.license}` : '',
+                        'Locations': 'Video session: Online',
+                        'Education': '',
+                        'Faiths': '',
+                        'Min Session Price': formatPrice(provider.price),
+                        'Max Session Price': formatPrice(provider.price),
+                        'Pay Out Of Pocket Status': 'Yes',
+                        'Individual Service Rates': `${formatPrice(provider.price)}-${formatPrice(provider.price)}`,
+                        'General Payment Options': '',
+                        'Booking Summary': await formatAppointmentSlots(provider.shortId, state),
+                        'Booking Url': `https://growtherapy.com/book-appointment?prsid=${provider.shortId}`,
+                        'Listed In States': stateCode,
+                        'States': stateCode,
+                        'Listed In Websites': 'Grow Therapy',
+                        'Urls': `https://growtherapy.com/provider/${provider.shortId || provider.id}-${provider.name.toLowerCase().replace(/\s+/g, '-')}`,
+                        'Connect Link - Facebook': '',
+                        'Connect Link - Instagram': '',
+                        'Connect Link - LinkedIn': '',
+                        'Connect Link - Twitter': '',
+                        'Connect Link - Website': '',
+                        'Main Specialties': provider.topSpecialties?.join(', ') || provider.specialties?.join(', ') || '',
+                        'Accepted IPs': '',
+                        'Total Slots in 7 Days': totalSlots,
+                        'Sr. NO': providerCount,
+                        'NPI': npiData
+                    };
 
-                    // Credentials
-                    'Licenses': provider.license ? `Licensed ${provider.license}` : '',
-                    'Locations': 'Video session: Online', // Simplified to match Excel
-                    'Education': '',
-                    'Faiths': '',
+                    allProviders.push(formattedProvider);
+                    providerCount++;
+                    await sleep(100);
+                }
 
-                    // Pricing - matching Excel format exactly
-                    'Min Session Price': formatPrice(provider.price),
-                    'Max Session Price': formatPrice(provider.price),
-                    'Pay Out Of Pocket Status': 'Yes', // Default assumption
-                    'Individual Service Rates': `${formatPrice(provider.price)}-${formatPrice(provider.price)}`,
-                    'General Payment Options': '', // Not available in this API
+                countOffset += 50; // next page
 
-                    // Availability - matching Excel format
-                    'Booking Summary': formatAppointmentSlots(provider.nextAvailableAppointment),
-                    'Booking Url': `https://growtherapy.com/provider/${provider.shortId || provider.id}-${provider.name.toLowerCase().replace(/\s+/g, '-')}`,
-
-                    // Location info
-                    'Listed In States': stateCode,
-                    'States': stateCode,
-                    'Listed In Websites': 'Grow Therapy',
-                    'Urls': `https://growtherapy.com/provider/${provider.shortId || provider.id}-${provider.name.toLowerCase().replace(/\s+/g, '-')}`,
-
-                    // Social links - all empty as in Excel example
-                    'Connect Link - Facebook': '',
-                    'Connect Link - Instagram': '',
-                    'Connect Link - LinkedIn': '',
-                    'Connect Link - Twitter': '',
-                    'Connect Link - Website': '',
-
-                    // Specialties
-                    'Main Specialties': provider.topSpecialties?.join(', ') || provider.specialties?.join(', ') || '',
-                    'Accepted IPs': '', // Not available in this API
-
-                    // Additional data
-                    'Total Slots in 7 Days': totalSlots,
-                    'Sr. NO': providerCount,
-
-                    // NPI Data
-                    'NPI': npiData
-                };
-
-                allProviders.push(formattedProvider);
-                providerCount++;
-
-                // Small delay between providers
-                await sleep(100);
+                await sleep(500); // small delay between pages
+            } catch (err) {
+                console.error(`[ERROR] ${state}:`, err.message);
+                hasProviders = false;
             }
-
-            console.log(`[COMPLETED] Finished processing ${state} with ${providers.length} providers`);
-            await sleep(1000); // Delay between states
-
-        } catch (err) {
-            console.error(`[ERROR] ${state}:`, err.message);
         }
+
+        console.log(`[COMPLETED] Finished processing ${state}`);
+        await sleep(1000); // Delay between states
     }
-
-    // Save to JSON
-    console.log(`[SAVING] Saving ${allProviders.length} providers to JSON...`);
-    fs.writeFileSync('./growtherapy_complete_data.json', JSON.stringify(allProviders, null, 2));
-
-    // Save to Excel
-    await saveToExcel(allProviders);
-
-    console.log(`[COMPLETED] Saved ${allProviders.length} providers to JSON and Excel ✅`);
+    return allProviders;
 };
-
 // Function to save data to Excel with exact column order matching your Excel
 const saveToExcel = async (providers) => {
     console.log('[EXCEL] Creating Excel file...');
@@ -344,8 +330,8 @@ const main = async () => {
     console.log('=====================================');
 
     try {
-        await fetchAllStates();
-
+        const allProviders = await fetchAllStates();
+        await saveToExcel(allProviders)
         // Read the saved data to generate summary
         const savedData = JSON.parse(fs.readFileSync('./growtherapy_complete_data.json', 'utf8'));
         generateSummary(savedData);
