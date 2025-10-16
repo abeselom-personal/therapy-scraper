@@ -2,15 +2,13 @@ import fs from 'fs';
 import fetch from 'node-fetch';
 import { writeFile, utils } from 'xlsx';
 
-// const states = [
-//     'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
-//     'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
-//     'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
-//     'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-//     'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-// ];
 const states = [
-    'Alabama',]
+    'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
+    'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts',
+    'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey',
+    'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+    'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+];
 const BASE_URL = 'https://growtherapy.com/api/provider-search?shouldUseSrpDescriptions=false&limit=5000&cacheControl=no-cache&fetchPolicy=cache-first&isEnhancedPagination=true&fetchPageCount=false&isLowNoSupplyState=false&isSpecialtiesFilterWithAnd=false&isExactMatchForFilters=false&name=&sortAlgorithmVersion=provider_ranking_algo_v13a&timeZone=UTC';
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -107,8 +105,7 @@ const fetchAllStates = async () => {
             const providers = json.marketplaceData?.paginatedMarketplaceProviders?.providers || [];
             console.log(`[DEBUG] Providers found in ${state}: ${providers.length}`);
 
-            for (let i = 0; i < Math.min(providers.length, 5); i++) {
-                const provider = providers[i];
+            for (const provider of providers) {
                 console.log(`[PROCESSING] ${providerCount}. ${provider.name} in ${state}`);
 
                 // Fetch NPI for each provider
