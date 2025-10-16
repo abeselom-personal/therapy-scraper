@@ -1,0 +1,31 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+env/
+venv/
+*.log
+
+# Docker
+docker-compose.override.yml
+*.pid
+*.sock
+
+# VSCode / IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Export files
+exports/
