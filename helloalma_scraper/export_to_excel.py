@@ -6,14 +6,14 @@ from pymongo import MongoClient
 
 MONGO_HOST = os.getenv("MONGO_HOST", "mongodb")
 MONGO_PORT = int(os.getenv("MONGO_PORT", "27017"))
-MONGO_DB = os.getenv("MONGO_DB", "headway_speed_test")
+MONGO_DB = os.getenv("MONGO_DB", "heloalma_scraper_final")
 MONGO_USER = os.getenv("MONGO_USER", "scraper")
 MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "scraper")
-OUTPUT_DIR = "./exports"
+OUTPUT_DIR = "./exports/helloalma"
 
 
 def get_mongo_client():
-    conn = "mongodb://scraper:scraper@localhost:27017/headway_speed_test?authSource=admin"
+    conn = f"mongodb://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DB}?authSource=admin"
     return MongoClient(conn)
 
 

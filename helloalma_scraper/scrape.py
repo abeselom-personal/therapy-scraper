@@ -563,6 +563,72 @@ class AlmaTherapistScraper:
         logger.debug(f"📊 Total slots in 7 days: {total_slots}")
         return total_slots
 
+    def generate_npi_data(
+        self, name: str, city: str, states: Optional[List[str]] = None
+    ) -> str:
+        """
+        Generate NPI data using the NPI API for a given provider name, city, and optional states.
+
+        Args:
+            name: Provider's full name
+            city: Provider's city
+            states: Optional list of state abbreviations to filter results
+
+        Returns:
+            NPI number as string if found, else empty string
+        """
+        try:
+            first_name = name.split()[0] if len(name.split()) > 0 else ""
+            last_name = name.split()[-1] if len(name.split()) > 1 else ""
+            logger.info(
+                f"🔍 Searching NPI for: first_name='{first_name}', last_name='{last_name}', city='{city}', states={states}"
+            )
+
+            url = "https://npiregistry.cms.hhs.gov/api/"
+            params = {
+                "version": "2.1",
+                "first_name": first_name,
+                "last_name": last_name,
+                # "city": city,
+                "limit": 5,  # fetch multiple to filter by state if needed
+            }
+
+            response = requests.get(url, params=params, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+            results = data.get("results", [])
+
+            logger.info(f"📊 API returned {len(results)} results")
+
+            if states:
+                results = [
+                    r
+                    for r in results
+                    if r.get("addresses")
+                    and any(
+                        addr.get("state", "").upper()
+                        in [s.upper() for s in states]
+                        for addr in r["addresses"]
+                    )
+                ]
+                logger.info(
+                    f"📊 Filtered results by states {states}: {len(results)} remaining"
+                )
+
+            if results:
+                npi_number = results[0].get("number", "")
+                logger.info(f"✅ Found NPI: {npi_number}")
+                return npi_number
+
+            logger.warning(
+                f"⚠️ No NPI found for {name} in city {city} with states={states}"
+            )
+            return ""
+
+        except Exception as e:
+            logger.error(f"❌ Failed to fetch NPI for {name} ({city}): {e}")
+            return ""
+
     def generate_booking_summary(
         self, availability_data: Optional[Dict]
     ) -> str:
@@ -614,13 +680,7 @@ class AlmaTherapistScraper:
     ) -> Dict:
         """
         Process raw provider data into structured format for Excel export.
-
-        Args:
-            provider_data: Raw provider data from API
-            availability_data: Availability data for the provider
-
-        Returns:
-            Processed data dictionary
+        Now formatted to match the exact target structure.
         """
         provider_id = provider_data.get("providerId", "Unknown")
         provider_slug = provider_data.get("providerSlug", "")
@@ -639,16 +699,12 @@ class AlmaTherapistScraper:
         last_name = provider_data.get("providerLastName", "")
         full_name = f"{first_name} {last_name}".strip().upper()
 
-        logger.debug(f"👤 Provider name: {full_name}")
-
         # Profession and bio
         profession = provider_data.get("title", "")
         bio = provider_data.get("summary", "")
-        logger.debug(f"🎓 Profession: {profession}")
 
         # Filterables extraction
         filterables = provider_data.get("filterables", [])
-        logger.debug(f"🏷️  Total filterables: {len(filterables)}")
 
         # Enhanced field extraction for the desired format
         treatment_approaches = self.extract_treatment_approaches_detailed(
@@ -675,7 +731,6 @@ class AlmaTherapistScraper:
         # Licenses and states
         licensure_states = provider_data.get("licensureStates", [])
         licenses = ", ".join(licensure_states) if licensure_states else ""
-        logger.debug(f"📜 Licenses: {licenses}")
 
         # Rate parsing
         rate_value = provider_data.get("rateValue", "")
@@ -688,7 +743,6 @@ class AlmaTherapistScraper:
         )
         all_insurance = list(set(accepted_insurance + verified_insurance))
         insurance_names = self.extract_insurance_names_detailed(all_insurance)
-        logger.debug(f"💳 Insurance providers: {len(all_insurance)}")
 
         # Pay out of pocket status
         pay_out_of_pocket = (
@@ -699,37 +753,42 @@ class AlmaTherapistScraper:
             )
             else "No"
         )
-        logger.debug(f"💵 Out of pocket: {pay_out_of_pocket}")
 
         # Enhanced booking summary
         booking_summary = self.generate_booking_summary(availability_data)
 
-        # NEW: Calculate total slots in 7 days
+        # Generate NPI data - using the existing method
+        npi_data = self.generate_npi_data(full_name, "", licensure_states)
+
+        # Calculate total slots in 7 days
         total_slots_7_days = self.calculate_total_slots_7_days(
             availability_data
         )
 
-        # Construct the complete data row matching the exact format
+        # Extract Sr. NO from the nested structure or use providerId as fallback
+        sr_no = provider_data.get("Sr", {}).get(" NO", provider_id)
+
+        # Construct the complete data row matching the EXACT target format
         processed_data = {
             "Url": f"https://secure.helloalma.com/providers/{provider_slug}/",
-            "Name": full_name,  # Uppercase like example
+            "Name": full_name,
             "Profession": profession,
-            "Clinic Name": "",  # Not available in API
+            "Clinic Name": "",
             "Bio": bio,
-            "Additional Focus Areas": "",  # Not separating additional focus areas anymore
+            "Additional Focus Areas": "",
             "Treatment Approaches": treatment_approaches,
             "Appointment Types": appointment_types,
-            "Communities": "",  # Not using communities field
+            "Communities": "",
             "Age Groups": age_groups,
             "Languages": languages,
             "Highlights": highlights,
             "Gender": gender,
-            "Pronouns": "",  # Not available in API
+            "Pronouns": "",
             "Race Ethnicity": race_ethnicity,
             "Licenses": f"Licensed {profession.split(', ')[-1] if ',' in profession else profession}",
-            "Locations": "Video session: Online",  # Default to online since Alma is primarily virtual
-            "Education": "",  # Not available in API
-            "Faiths": "",  # Not available in API
+            "Locations": "Video session: Online",
+            "Education": "",
+            "Faiths": "",
             "Min Session Price": min_price,
             "Max Session Price": max_price,
             "Pay Out Of Pocket Status": pay_out_of_pocket,
@@ -737,8 +796,10 @@ class AlmaTherapistScraper:
             "General Payment Options": insurance_names,
             "Booking Summary": booking_summary,
             "Booking Url": profile_url,
-            "Listed In States": licenses,
-            "States": licenses,
+            "Listed In States": (
+                ", ".join(licensure_states) if licensure_states else ""
+            ),
+            "States": ", ".join(licensure_states) if licensure_states else "",
             "Listed In Websites": "Hello Alma",
             "Urls": profile_url,
             "Connect Link - Facebook": "",
@@ -746,15 +807,17 @@ class AlmaTherapistScraper:
             "Connect Link - LinkedIn": "",
             "Connect Link - Twitter": "",
             "Connect Link - Website": "",
-            "Main Specialties": all_specialties,  # Now contains ALL specialties
+            "Main Specialties": all_specialties,
             "Accepted IPs": insurance_names,
-            "Total Slots in 7 Days": total_slots_7_days,  # NEW COLUMN
-            "Sr. NO": provider_data.get("providerId", ""),
-            "raw_data": provider_data,  # Store raw data for reference
+            "Total Slots in 7 Days": total_slots_7_days,
+            "Sr. NO": sr_no,
+            # Store raw data and metadata separately
+            "raw_data": provider_data,
             "scraped_at": datetime.now(),
             "processed_at": datetime.now().isoformat(),
+            "npi_data": npi_data,  # Keep this for reference but it won't be in Excel export
         }
-        print(processed_data)
+
         logger.info(
             f"✅ Successfully processed: {full_name} (ID: {provider_id}) - {total_slots_7_days} slots in 7 days"
         )
@@ -883,19 +946,13 @@ class AlmaTherapistScraper:
     ) -> pd.DataFrame:
         """
         Export data from storage to Excel with specified format.
-
-        Args:
-            filename: Output Excel filename
-
-        Returns:
-            DataFrame containing the exported data
+        Now with exact column order matching the target format.
         """
         logger.info(f"💾 Exporting data to Excel: {filename}")
 
         try:
             # Get data from appropriate source
             if self.use_mongodb:
-                # Fetch all documents from MongoDB, excluding the raw_data field
                 cursor = self.collection.find(
                     {},
                     {
@@ -903,25 +960,27 @@ class AlmaTherapistScraper:
                         "scraped_at": 0,
                         "_id": 0,
                         "processed_at": 0,
+                        "npi_data": 0,  # Exclude npi_data from export
                     },
                 )
                 data_list = list(cursor)
                 total_documents = self.collection.count_documents({})
-                logger.info(f"📊 Found {total_documents} documents in MongoDB")
             else:
-                # Use local data, remove internal fields
                 data_list = []
                 for item in self.local_data:
                     cleaned_item = {
                         k: v
                         for k, v in item.items()
-                        if k not in ["raw_data", "scraped_at", "processed_at"]
+                        if k
+                        not in [
+                            "raw_data",
+                            "scraped_at",
+                            "processed_at",
+                            "npi_data",
+                        ]
                     }
                     data_list.append(cleaned_item)
                 total_documents = len(data_list)
-                logger.info(
-                    f"📊 Found {total_documents} documents in local storage"
-                )
 
             # Convert to DataFrame
             df = pd.DataFrame(data_list)
@@ -930,11 +989,7 @@ class AlmaTherapistScraper:
                 logger.warning("⚠️  No data found to export")
                 return pd.DataFrame()
 
-            logger.info(
-                f"📋 DataFrame created with {len(df)} rows and {len(df.columns)} columns"
-            )
-
-            # Ensure the column order matches the specified header EXACTLY with the new column
+            # EXACT column order matching the target format
             expected_columns = [
                 "Url",
                 "Name",
@@ -973,76 +1028,31 @@ class AlmaTherapistScraper:
                 "Connect Link - Website",
                 "Main Specialties",
                 "Accepted IPs",
-                "Total Slots in 7 Days",  # NEW COLUMN
+                "Total Slots in 7 Days",
                 "Sr. NO",
             ]
 
-            logger.info(f"📑 Expected columns: {len(expected_columns)}")
-            logger.info(f"📑 Actual columns: {len(df.columns)}")
-
             # Add missing columns with empty values
-            missing_columns = []
             for col in expected_columns:
                 if col not in df.columns:
                     df[col] = ""
-                    missing_columns.append(col)
-
-            if missing_columns:
-                logger.info(f"📝 Added missing columns: {len(missing_columns)}")
-                logger.debug(f"📝 Missing columns: {missing_columns}")
 
             # Reorder columns to match exact specification
             df = df[expected_columns]
-            logger.info("✅ Columns reordered to match expected format")
-
-            # Calculate statistics for the new column
-            if not df.empty and "Total Slots in 7 Days" in df.columns:
-                total_slots_series = pd.to_numeric(
-                    df["Total Slots in 7 Days"], errors="coerce"
-                )
-                avg_slots = total_slots_series.mean()
-                max_slots = total_slots_series.max()
-                providers_with_slots = total_slots_series[
-                    total_slots_series > 0
-                ].count()
-
-                logger.info("📊 Availability Statistics:")
-                logger.info(f"   • Average slots in 7 days: {avg_slots:.1f}")
-                logger.info(f"   • Maximum slots in 7 days: {max_slots}")
-                logger.info(
-                    f"   • Providers with available slots: {providers_with_slots}/{len(df)}"
-                )
 
             # Export to Excel
-            try:
-                df.to_excel(filename, index=False, engine="openpyxl")
-                logger.info(f"✅ Excel file created successfully: {filename}")
+            df.to_excel(filename, index=False, engine="openpyxl")
+            logger.info(f"✅ Excel file created successfully: {filename}")
 
-                # Print summary statistics
-                logger.info("📊 Export Summary:")
-                logger.info(f"   • Total therapists: {len(df)}")
-                logger.info(f"   • Total columns: {len(df.columns)}")
-                logger.info(
-                    f"   • File size: {len(df) * len(df.columns)} data points"
-                )
+            # Print summary
+            logger.info("📊 Export Summary:")
+            logger.info(f"   • Total therapists: {len(df)}")
+            logger.info(f"   • Total columns: {len(df.columns)}")
 
-                # Show some basic stats about the data
-                if not df.empty:
-                    states_count = (
-                        df["States"].str.split(", ").explode().nunique()
-                    )
-                    specialties_count = (
-                        df["Main Specialties"]
-                        .str.split(", ")
-                        .explode()
-                        .nunique()
-                    )
-                    logger.info(f"   • Unique states: {states_count}")
-                    logger.info(f"   • Unique specialties: {specialties_count}")
-
-            except Exception as e:
-                logger.error(f"❌ Failed to create Excel file: {e}")
-                raise
+            # Show column alignment
+            logger.info("🔍 Column alignment check:")
+            for i, col in enumerate(expected_columns, 1):
+                logger.info(f"   {i:2d}. {col}")
 
             return df
 
@@ -1117,7 +1127,7 @@ def main():
     # Configuration - Set these according to your MongoDB setup
     # MONGO_URI = "mongodb://localhost:27017/"
     MONGO_URI = "mongodb://scraper:scraper@localhost:27017/helloalma_speed_test?authSource=admin"
-    DB_NAME = "alma_therapists"
+    DB_NAME = "alma_therapists_final"
     MONGO_USERNAME = "scraper"
     MONGO_PASSWORD = "scraper"
     USE_MONGODB = True
@@ -1141,7 +1151,7 @@ def main():
         logger.info(f"   • Output: Structured therapist data")
 
         logger.info("🌐 Beginning data scraping process...")
-        for i in range(2388):
+        for i in range(40000):
             scraper.scrape_and_store(pages=i + 1, limit=15)
 
         logger.info("📊 Generating scraping statistics...")
@@ -1149,7 +1159,7 @@ def main():
 
         # Export to Excel
         logger.info("💾 Beginning Excel export process...")
-        df = scraper.export_to_excel("alma_therapists_export.xlsx")
+        df = scraper.export_to_excel("exports/alma_therapists_export.xlsx")
 
         if not df.empty:
             logger.info("🎉 Process completed successfully!")
@@ -1162,7 +1172,6 @@ def main():
         logger.error(f"💥 Fatal error in main process: {e}")
 
     finally:
-        # Always close resources
         scraper.close()
         logger.info("=" * 80)
         logger.info("🏁 Alma Therapist Scraper has finished execution")
