@@ -63,7 +63,7 @@ const states = [
 
 (async () => {
     await fs.mkdir(path.join(__dirname, 'data'), { recursive: true });
-    const browser = await firefox.launch({ headless: false });
+    const browser = await firefox.launch({ headless: true });
     const context = await browser.newContext({ userAgent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)' });
     const page = await context.newPage();
 
