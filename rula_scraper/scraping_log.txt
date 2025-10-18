@@ -1,0 +1,49 @@
+=== Scraping Session Started: 2025-10-18T09-53-57.725Z ===
+
+[2025-10-18T09:53:57.733Z] [INFO] Starting complete scraping process...
+[2025-10-18T09:53:57.734Z] [INFO] Starting parallel state scraping...
+[2025-10-18T09:53:58.827Z] [INFO] [1/51] Attempt 1: https://www.rula.com/therapists/al
+[2025-10-18T09:53:59.016Z] [INFO] [2/51] Attempt 1: https://www.rula.com/therapists/ak
+[2025-10-18T09:53:59.178Z] [INFO] [3/51] Attempt 1: https://www.rula.com/therapists/az
+[2025-10-18T09:54:04.292Z] [INFO] ✓ Saved ak.json with 18 providers
+[2025-10-18T09:54:05.340Z] [INFO] ✓ Saved az.json with 15 providers
+[2025-10-18T09:54:05.733Z] [INFO] ✓ Saved al.json with 30 providers
+[2025-10-18T09:54:08.089Z] [INFO] [6/51] Attempt 1: https://www.rula.com/therapists/co
+[2025-10-18T09:54:08.090Z] [INFO] [4/51] Attempt 1: https://www.rula.com/therapists/ar
+[2025-10-18T09:54:08.092Z] [INFO] [5/51] Attempt 1: https://www.rula.com/therapists/ca
+[2025-10-18T09:54:20.588Z] [INFO] ✓ Saved ar.json with 76 providers
+[2025-10-18T09:54:20.738Z] [INFO] ✓ Saved ca.json with 75 providers
+[2025-10-18T09:54:27.038Z] [INFO] ✓ Saved co.json with 150 providers
+[2025-10-18T09:54:29.359Z] [INFO] [7/51] Attempt 1: https://www.rula.com/therapists/ct
+[2025-10-18T09:54:29.375Z] [INFO] [8/51] Attempt 1: https://www.rula.com/therapists/de
+[2025-10-18T09:54:29.388Z] [INFO] [9/51] Attempt 1: https://www.rula.com/therapists/dc
+[2025-10-18T09:54:35.836Z] [INFO] ✓ Saved de.json with 31 providers
+[2025-10-18T09:54:37.621Z] [INFO] ✓ Saved dc.json with 49 providers
+[2025-10-18T09:54:42.507Z] [INFO] ✓ Saved ct.json with 102 providers
+[2025-10-18T09:54:44.852Z] [INFO] [11/51] Attempt 1: https://www.rula.com/therapists/ga
+[2025-10-18T09:54:44.854Z] [INFO] [12/51] Attempt 1: https://www.rula.com/therapists/hi
+[2025-10-18T09:54:44.854Z] [INFO] [10/51] Attempt 1: https://www.rula.com/therapists/fl
+[2025-10-18T09:54:58.453Z] [INFO] ✓ Saved hi.json with 90 providers
+[2025-10-18T09:55:04.460Z] [INFO] ✓ Saved fl.json with 150 providers
+[2025-10-18T09:55:04.572Z] [INFO] ✓ Saved ga.json with 150 providers
+[2025-10-18T09:55:07.042Z] [INFO] [13/51] Attempt 1: https://www.rula.com/therapists/id
+[2025-10-18T09:55:07.043Z] [INFO] [15/51] Attempt 1: https://www.rula.com/therapists/in
+[2025-10-18T09:55:07.043Z] [INFO] [14/51] Attempt 1: https://www.rula.com/therapists/il
+[2025-10-18T09:55:13.988Z] [INFO] ✓ Saved id.json with 42 providers
+[2025-10-18T09:55:26.265Z] [INFO] ✓ Saved il.json with 150 providers
+[2025-10-18T09:55:26.591Z] [INFO] ✓ Saved in.json with 137 providers
+[2025-10-18T09:55:28.927Z] [INFO] [17/51] Attempt 1: https://www.rula.com/therapists/ks
+[2025-10-18T09:55:28.927Z] [INFO] [16/51] Attempt 1: https://www.rula.com/therapists/ia
+[2025-10-18T09:55:28.942Z] [INFO] [18/51] Attempt 1: https://www.rula.com/therapists/ky
+[2025-10-18T09:55:34.921Z] [INFO] ✓ Saved ia.json with 25 providers
+[2025-10-18T09:55:37.719Z] [INFO] ✓ Saved ks.json with 48 providers
+[2025-10-18T09:55:39.394Z] [INFO] ✓ Saved ky.json with 71 providers
+[2025-10-18T09:55:41.732Z] [INFO] [19/51] Attempt 1: https://www.rula.com/therapists/la
+[2025-10-18T09:55:41.737Z] [INFO] [21/51] Attempt 1: https://www.rula.com/therapists/md
+[2025-10-18T09:55:41.738Z] [INFO] [20/51] Attempt 1: https://www.rula.com/therapists/me
+[2025-10-18T09:55:50.465Z] [INFO] ✓ Saved me.json with 51 providers
+[2025-10-18T09:55:59.514Z] [INFO] ✓ Saved la.json with 121 providers
+[2025-10-18T09:56:01.282Z] [INFO] ✓ Saved md.json with 150 providers
+[2025-10-18T09:56:03.691Z] [INFO] [22/51] Attempt 1: https://www.rula.com/therapists/ma
+[2025-10-18T09:56:03.692Z] [INFO] [23/51] Attempt 1: https://www.rula.com/therapists/mi
+[2025-10-18T09:56:03.708Z] [INFO] [24/51] Attempt 1: https://www.rula.com/therapists/mn

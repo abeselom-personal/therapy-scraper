@@ -1,232 +1,74 @@
 [
   {
-    "name": "Adriana Shipowick",
-    "profile_url": "https://www.rula.com/providers/AK/1417757139-adriana-shipowick",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/27-05-2025_Adriana_Shipowick_1417757139",
-    "city": "Alaska",
-    "bio": "My passion is helping people, and I am dedicated to supporting you on your journey toward mental and emotional well-being.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Duncan Brooks",
-    "profile_url": "https://www.rula.com/providers/AK/1003135161-duncan-brooks",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/06-01-2025_Duncan_Brooks_1003135161",
-    "city": "Anchorage, AK",
-    "bio": "I am a licensed professional counselor practicing Emotion-Focused Therapy in Alaska. I have spent the past several years working primarily with couples seeking more connection and intimacy.",
-    "next_appointment": null,
-    "badges": [
-      "LPC",
-      "16+ years",
-      "Top provider"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Marie Lavigne",
-    "profile_url": "https://www.rula.com/providers/AK/1306438908-marie-lavigne",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/26-03-2025_Marie_Lavigne_1306438908",
-    "city": "Anchorage, AK",
-    "bio": "I am a Licensed Clinical Social Worker with over two decades of experience in Alaska as a social worker, with a passion for health and wellness. My approach is compassionate, collaborative, and hopeful. I offer a solution-focused, brief therapy framework to join you in identifying your strengths, to identify solutions, and to support you in making positive life changes that will sustain your mental wellness and bring the joy and passion back into your life.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW",
-      "Top provider"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Erin Lusk",
-    "profile_url": "https://www.rula.com/providers/AK/1285112250-erin-lusk",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/15-05-2025_Erin_Lusk_1285112250",
-    "city": "Palmer, AK",
-    "bio": "Are you feeling overwhelmed and wondering what life will throw your way next? Feeling anxious, depressed, and worrying or overthinking while you should be sleeping? I am here to show you that you are not alone. Together, we can get you back on track and feeling some relief. I am an Alaskan, member of the LGBTQ community, who works with adults experiencing life transitions, grief, career changes, and more. I use a strength-based and client-centered approach to work towards real solutions so you can feel your best again.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Ann Hutcheson",
-    "profile_url": "https://www.rula.com/providers/AK/1528231495-ann-hutcheson",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/02-09-2025_Ann_Hutcheson_1528231495",
-    "city": "Eagle River, AK",
-    "bio": "Whether you are new or returning to therapy, I am here to help work with you on reaching your goals in therapy. I specialize in working with individuals who experiencing PTSD, anxiety, depression, and substance use. My job as a therapist is bring to the table the skills and expertise of research and combine those in a collaborative approach to help clients reach their goals. It can feel overwhelming to reach out for therapy, I would be happy to answer any questions you may have about my approach and therapy in general.",
-    "next_appointment": null,
-    "badges": [
-      "LP"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Edmore Mangena",
-    "profile_url": "https://www.rula.com/providers/AK/1629291422-edmore-mangena",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/22-07-2024_Edmore_Mangena_1629291422",
-    "city": "Valdez, AK",
-    "bio": "I am a Licensed Professional Counselor in Alaska. I have practiced in Alaska since 2006, and I have worked with all ages, children and families, individuals, and couples. I use an integrated approach to therapy that is anchored in Cognitive Behavior Therapy. I use person-centered therapy for its emphasis on relationships and existential therapy for its supportive approach. I believe providing clients with a supportive non-judgmental space enables them to work out their issues to resolution or to clarity.",
-    "next_appointment": null,
-    "badges": [
-      "LPC",
-      "10+ years",
-      "Relationship builder"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Lisa Santiago",
-    "profile_url": "https://www.rula.com/providers/AK/1184453482-lisa-santiago",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/04-02-2025_Lisa_Santiago_1184453482",
-    "city": "Fairbanks, AK",
-    "bio": "I am a licensed professional counselor specializing in trauma therapy. I am trained in Eye Movement Desensitization Reprocessing (EMDR), a highly effective approach that helps clients process distressing memories and reframe negative beliefs.",
-    "next_appointment": null,
-    "badges": [
-      "LPC"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Michelle Kimbrell",
-    "profile_url": "https://www.rula.com/providers/AK/1811761216-michelle-kimbrell",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/07-01-2025_Michelle_Kimbrell_1811761216",
-    "city": "Anchorage, AK",
-    "bio": "I’m a licensed clinical social worker specializing in health and wellness. My work is rooted in empowering individuals to build resilience and strength through compassionate, strengths-based therapeutic approaches. I integrate a variety of evidence-based theories, including Cognitive Behavioral Therapy and Solution-Focused interventions, to support healing and growth.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW",
-      "11+ years",
-      "Top provider"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Raymond Butts",
-    "profile_url": "https://www.rula.com/providers/AK/1548425648-raymond-butts",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/29-08-2025_Raymond_Butts_1548425648",
-    "city": "Alaska",
-    "bio": "It's so nice to meet you. I am a licensed professional counselor (LPC) and have practiced since 2005 after having come from an educational career of 28 years. I am licensed in Alaska, Missouri, and Maine.",
-    "next_appointment": null,
-    "badges": [
-      "LPC"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "John Weaver",
-    "profile_url": "https://www.rula.com/providers/AK/1386196111-john-weaver",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/27-02-2025_John_Weaver_1386196111",
-    "city": "Girdwood, AK",
-    "bio": "I am a lifelong Alaskan who has been working in behavioral health since 2006. I graduated from the University of Alaska Anchorage in 2010 with a Master of Social Work Degree and have been a Licensed Clinical Social Worker in the State of Alaska since 2013. I have since worked in the communities of Anchorage, Kodiak, and Girdwood.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Khuyen Luu",
-    "profile_url": "https://www.rula.com/providers/AK/1548973035-khuyen-luu",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/12-02-2024_Khuyen_Luu_1548973035",
-    "city": "Alaska",
-    "bio": "I am a Licensed Professional Counselor. I apply a holistic approach to support you in the journey from where you are to where you want to be. The focus of my practice is helping all of my clients to be free from their negative past experiences to live their lives to their full potential.",
-    "next_appointment": null,
-    "badges": [
-      "LPC",
-      "5+ years",
-      "Trust building"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Michelle Lesagonicz",
-    "profile_url": "https://www.rula.com/providers/AK/1467990648-michelle-lesagonicz",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/14-10-2024_Michelle_Lesagonicz_1467990648",
-    "city": "Soldotna, AK",
-    "bio": "I am a licensed clinical social worker in Alaska who has worked with adult individuals for over 10 years. I can teach you ways to manage chronic pain, lower depression and anxiety symptoms, work through traumatic events, and explore changes in your life past and present, all in a supportive, caring, safe, and confidential environment. You can discover ways to make clear, positive decisions and live the life you deserve to live. With support, knowledge, and self-awareness, you can learn how to heal, apply self-empowerment, and add balance to your life. I look forward to working with you.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW",
-      "8+ years"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Kristina Weltzin",
-    "profile_url": "https://www.rula.com/providers/AK/1588432967-kristina-weltzin",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/12-02-2024_Kristina_Weltzin_1588432967",
-    "city": "Juneau, AK",
-    "bio": "Greetings! I hold a License in Clinical Social Work and have been licensed for over 25 years. I offer brief solution-focused therapy for youth and adults.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW",
-      "28+ years",
-      "Patient favorite",
-      "Top provider"
-    ],
-    "virtual": false
-  },
-  {
     "name": "Shelby Thompson",
-    "profile_url": "https://www.rula.com/providers/AK/1831667534-shelby-thompson",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/23-04-2025_Shelby_Thompson_1831667534",
-    "city": "Alaska",
-    "bio": "I am a licensed clinical social worker specializing in helping individuals navigate life’s stressors—whether that’s managing anxiety, healing from trauma, or improving relationships. I provide a compassionate, person-centered approach to therapy, blending evidence-based techniques with genuine human connection.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Elena Martin",
-    "profile_url": "https://www.rula.com/providers/AK/1588209225-elena-martin",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/20-09-2024_Elena_Martin_1588209225",
-    "city": "Ketchikan, AK",
-    "bio": "I am a Licensed Professional Counselor (LPC) in the State of Alaska. I have been providing counseling services in Alaska for over 15 years. I have a Master's Degree in Psychology, and I am a Certified Chemical Dependency Counselor (CDCII). I have training in Dialectical Behavioral Therapy (DBT), Cognitive Behavioral Therapy (CBT), MATRIX (evidence-based treatment for addiction), and Love and Logic (Parenting Solutions).",
-    "next_appointment": null,
-    "badges": [
-      "LPC",
-      "6+ years"
-    ],
-    "virtual": false
+    "profile_url": "https://www.rula.com/providers/AK/1831667534-shelby-thompson"
   },
   {
     "name": "Emma Ayala",
-    "profile_url": "https://www.rula.com/providers/AK/1336875103-emma-ayala",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/13-08-2025_Emma_Ayala_1336875103",
-    "city": "Juneau, AK",
-    "bio": "Have you experienced trauma? Are you feeling stuck, alone, overwhelmed, or unsure where to start? You don’t have to navigate this alone. I am a licensed professional counselor based in Juneau, Alaska. My experience is in working with trauma. I have experience working with teens and adults of all ages. I offer Telehealth services to clients 12 and up and adults of all ages. I look forward to connecting with you",
-    "next_appointment": null,
-    "badges": [
-      "LPC"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Philip Andujar",
-    "profile_url": "https://www.rula.com/providers/AK/1902505043-philip-andujar",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/08-09-2025_Philip_Andujar_1902505043",
-    "city": "Anchorage, AK",
-    "bio": "I’m a clinical social worker deeply committed to serving BIPOC and Alaska Native communities through culturally responsive, trauma-informed care. I currently serve as a clinician in Southeast Alaska. Our work together is about finding your way back to yourself. In each session, we’ll make space for softness, for honesty, for breathing room. We’ll explore the stories you carry, the systems that shaped them, and the tools that help you rewrite them. Expect a steady mix of grounded skill-building and soulful reflection, with a focus on healing, not fixing.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW"
-    ],
-    "virtual": false
+    "profile_url": "https://www.rula.com/providers/AK/1336875103-emma-ayala"
   },
   {
     "name": "Brandon Ercanbrack",
-    "profile_url": "https://www.rula.com/providers/AK/1093023012-brandon-ercanbrack",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/17-09-2025_Brandon_Ercanbrack_1093023012",
-    "city": "Anchorage, AK",
-    "bio": "Congrats on taking the first big step in finding wellness. I have always compared my role as your therapist to that of a coach. I am not here to make the plays for you, but I can help you gain invaluable insights so that you can score on the life goals that truly matter to you.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW"
-    ],
-    "virtual": false
+    "profile_url": "https://www.rula.com/providers/AK/1093023012-brandon-ercanbrack"
+  },
+  {
+    "name": "Khuyen Luu",
+    "profile_url": "https://www.rula.com/providers/AK/1548973035-khuyen-luu"
+  },
+  {
+    "name": "Duncan Brooks",
+    "profile_url": "https://www.rula.com/providers/AK/1003135161-duncan-brooks"
+  },
+  {
+    "name": "Edmore Mangena",
+    "profile_url": "https://www.rula.com/providers/AK/1629291422-edmore-mangena"
+  },
+  {
+    "name": "Ann Hutcheson",
+    "profile_url": "https://www.rula.com/providers/AK/1528231495-ann-hutcheson"
+  },
+  {
+    "name": "Erin Lusk",
+    "profile_url": "https://www.rula.com/providers/AK/1285112250-erin-lusk"
+  },
+  {
+    "name": "Michelle Lesagonicz",
+    "profile_url": "https://www.rula.com/providers/AK/1467990648-michelle-lesagonicz"
+  },
+  {
+    "name": "Marie Lavigne",
+    "profile_url": "https://www.rula.com/providers/AK/1306438908-marie-lavigne"
+  },
+  {
+    "name": "Michelle Kimbrell",
+    "profile_url": "https://www.rula.com/providers/AK/1811761216-michelle-kimbrell"
+  },
+  {
+    "name": "John Weaver",
+    "profile_url": "https://www.rula.com/providers/AK/1386196111-john-weaver"
+  },
+  {
+    "name": "Kristina Weltzin",
+    "profile_url": "https://www.rula.com/providers/AK/1588432967-kristina-weltzin"
+  },
+  {
+    "name": "Adriana Shipowick",
+    "profile_url": "https://www.rula.com/providers/AK/1417757139-adriana-shipowick"
+  },
+  {
+    "name": "Raymond Butts",
+    "profile_url": "https://www.rula.com/providers/AK/1548425648-raymond-butts"
+  },
+  {
+    "name": "Elena Martin",
+    "profile_url": "https://www.rula.com/providers/AK/1588209225-elena-martin"
+  },
+  {
+    "name": "Lisa Santiago",
+    "profile_url": "https://www.rula.com/providers/AK/1184453482-lisa-santiago"
+  },
+  {
+    "name": "Philip Andujar",
+    "profile_url": "https://www.rula.com/providers/AK/1902505043-philip-andujar"
   }
 ]

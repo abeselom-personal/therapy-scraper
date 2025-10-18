@@ -1,100 +1,34 @@
 [
   {
     "name": "Rebecca Pihl",
-    "profile_url": "https://www.rula.com/providers/ND/1407343130-rebecca-pihl",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/16-07-2025_Rebecca_Pihl_1407343130",
-    "city": "North Dakota",
-    "bio": "I'm glad you're here. Deciding to make changes in your life is hard, and I want to help you meet your goals for your ideal life. I don't believe I know you better than you do on what those goals should be. I imagine my role as a person alongside you, working WITH you. I specialize in depression, anxiety, and other mood disorders, self-harm, and life transitions.",
-    "next_appointment": null,
-    "badges": [
-      "LPCC"
-    ],
-    "virtual": false
+    "profile_url": "https://www.rula.com/providers/ND/1407343130-rebecca-pihl"
   },
   {
     "name": "Erin Rocheleau",
-    "profile_url": "https://www.rula.com/providers/ND/1316496680-erin-rocheleau",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/26-08-2025_Erin_Rocheleau_1316496680",
-    "city": "North Dakota",
-    "bio": "I am a Licensed Professional Clinical Counselor in the State of North Dakota. I received a Master of Arts Degree in Counseling Psychology along with a Bachelor of Science in Rehabilitation in Human Services, both at the University of North Dakota in Grand Forks.",
-    "next_appointment": null,
-    "badges": [
-      "LPCC"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Lisa Martin",
-    "profile_url": "https://www.rula.com/providers/ND/1144552761-lisa-martin",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/18-03-2025_Lisa_Martin_1144552761",
-    "city": "North Dakota",
-    "bio": "I am a licensed clinical social worker with two decades of experience working directly with adult clients in a variety of treatment settings. I am a generalist therapist, and my primary specialties are working with clients who are experiencing depression, anxiety, co-dependency tendencies, grief, and life stressors/transitions.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Shone Topham",
-    "profile_url": "https://www.rula.com/providers/ND/1174248082-shone-topham",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/15-10-2025_Shone_Topham_1174248082",
-    "city": "Minot, ND",
-    "bio": "I am a Licensed Clinical Social Worker (LCSW) based in Minot, North Dakota, and I work with clients statewide via telehealth. I work with adults, 18 and over, and specialize in anxiety, anger management, depression, sleep issues, and stress.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW",
-      "4+ years"
-    ],
-    "virtual": false
-  },
-  {
-    "name": "Talitha Schnaidt",
-    "profile_url": "https://www.rula.com/providers/ND/1740556414-talitha-schnaidt",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/09-06-2025_Talitha_Schnaidt_1740556414",
-    "city": "Grand Forks, ND",
-    "bio": "With over 20 years of experience as a licensed mental health therapist, I’ve had the privilege of working with individuals across the lifespan—from children and adolescents to adults and older adults—in a wide range of settings, including schools, community agencies, hospitals, and private practice.",
-    "next_appointment": null,
-    "badges": [
-      "LPCC"
-    ],
-    "virtual": false
+    "profile_url": "https://www.rula.com/providers/ND/1316496680-erin-rocheleau"
   },
   {
     "name": "Channing Spradling",
-    "profile_url": "https://www.rula.com/providers/ND/1396292512-channing-spradling",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/22-05-2025_Channing_Spradling_1396292512",
-    "city": "Dickinson, ND",
-    "bio": "Whether you’re an individual seeking support for personal growth, managing anxiety, or healing from past trauma, or a couple navigating relationship issues, I’m here to provide guidance and support. I believe that therapy should be a collaborative process where you feel understood, respected, and empowered to make meaningful change.",
-    "next_appointment": null,
-    "badges": [
-      "LCSW"
-    ],
-    "virtual": false
+    "profile_url": "https://www.rula.com/providers/ND/1396292512-channing-spradling"
   },
   {
-    "name": "Melony Sanford",
-    "profile_url": "https://www.rula.com/providers/ND/1811408974-melony-sanford",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/07-01-2025_Melony_Sanford_1811408974",
-    "city": "North Dakota",
-    "bio": "I am a licensed professional clinical counselor (LPCC) based in Wyoming, working with clients in the state of North Dakota. I am licensed in both Wyoming and North Dakota to practice therapy. I primarily work with adults and specialize in trauma, depression, anxiety, addiction recovery, and stress management using evidence-based modalities for providing therapy. It is always my goal to be consistently present with clients in the most authentic way possible. Your goals are my goals, in a sense, so achieving recovery can be a very empowering process.",
-    "next_appointment": null,
-    "badges": [
-      "LPCC",
-      "6+ years"
-    ],
-    "virtual": false
+    "name": "Lisa Martin",
+    "profile_url": "https://www.rula.com/providers/ND/1144552761-lisa-martin"
+  },
+  {
+    "name": "Shone Topham",
+    "profile_url": "https://www.rula.com/providers/ND/1174248082-shone-topham"
+  },
+  {
+    "name": "Talitha Schnaidt",
+    "profile_url": "https://www.rula.com/providers/ND/1740556414-talitha-schnaidt"
   },
   {
     "name": "Jillian Haseleu",
-    "profile_url": "https://www.rula.com/providers/ND/1235914185-jillian-haseleu",
-    "image": "https://provider-headshots.s3.us-west-2.amazonaws.com/17-10-2025_Jillian_Haseleu_1235914185",
-    "city": "Buffalo, ND",
-    "bio": "I specialize in mental health counseling for individuals aged 13 and up, offering a compassionate, nonjudgmental environment where clients feel safe to explore their thoughts, emotions, and challenges.",
-    "next_appointment": null,
-    "badges": [
-      "LPCC"
-    ],
-    "virtual": false
+    "profile_url": "https://www.rula.com/providers/ND/1235914185-jillian-haseleu"
+  },
+  {
+    "name": "Melony Sanford",
+    "profile_url": "https://www.rula.com/providers/ND/1811408974-melony-sanford"
   }
 ]

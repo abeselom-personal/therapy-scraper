@@ -1,8 +1,10 @@
 import gc
 import os
+import time
 from datetime import datetime, timezone
 
 import pandas as pd
+import requests
 from pymongo import MongoClient
 
 MONGO_HOST = os.getenv("MONGO_HOST", "mongodb")
@@ -11,6 +13,61 @@ MONGO_DB = os.getenv("MONGO_DB", "headway_speed_test")
 MONGO_USER = os.getenv("MONGO_USER", "scraper")
 MONGO_PASSWORD = os.getenv("MONGO_PASSWORD", "scraper")
 OUTPUT_DIR = "/app/exports/headway/"
+
+# State mapping for NPI lookup
+STATE_MAP = {
+    "ALABAMA": "AL",
+    "ALASKA": "AK",
+    "ARIZONA": "AZ",
+    "ARKANSAS": "AR",
+    "CALIFORNIA": "CA",
+    "COLORADO": "CO",
+    "CONNECTICUT": "CT",
+    "DELAWARE": "DE",
+    "FLORIDA": "FL",
+    "GEORGIA": "GA",
+    "HAWAII": "HI",
+    "IDAHO": "ID",
+    "ILLINOIS": "IL",
+    "INDIANA": "IN",
+    "IOWA": "IA",
+    "KANSAS": "KS",
+    "KENTUCKY": "KY",
+    "LOUISIANA": "LA",
+    "MAINE": "ME",
+    "MARYLAND": "MD",
+    "MASSACHUSETTS": "MA",
+    "MICHIGAN": "MI",
+    "MINNESOTA": "MN",
+    "MISSISSIPPI": "MS",
+    "MISSOURI": "MO",
+    "MONTANA": "MT",
+    "NEBRASKA": "NE",
+    "NEVADA": "NV",
+    "NEW HAMPSHIRE": "NH",
+    "NEW JERSEY": "NJ",
+    "NEW MEXICO": "NM",
+    "NEW YORK": "NY",
+    "NORTH CAROLINA": "NC",
+    "NORTH DAKOTA": "ND",
+    "OHIO": "OH",
+    "OKLAHOMA": "OK",
+    "OREGON": "OR",
+    "PENNSYLVANIA": "PA",
+    "RHODE ISLAND": "RI",
+    "SOUTH CAROLINA": "SC",
+    "SOUTH DAKOTA": "SD",
+    "TENNESSEE": "TN",
+    "TEXAS": "TX",
+    "UTAH": "UT",
+    "VERMONT": "VT",
+    "VIRGINIA": "VA",
+    "WASHINGTON": "WA",
+    "WEST VIRGINIA": "WV",
+    "WISCONSIN": "WI",
+    "WYOMING": "WY",
+    "DISTRICT OF COLUMBIA": "DC",
+}
 
 
 def get_mongo_client():
@@ -63,6 +120,58 @@ def format_availability_summary(availability):
     return ", ".join(unique_slots[:10])  # Show first 10 unique slots
 
 
+def fetch_npi(name, long_state_name, retries=3):
+    """
+    Fetch NPI number from CMS NPI Registry API
+
+    Args:
+        name (str): Full name of the clinician
+        long_state_name (str): Full state name (e.g., "ALASKA")
+        retries (int): Number of retry attempts
+
+    Returns:
+        str: NPI number or empty string if not found
+    """
+    state_code = STATE_MAP.get(long_state_name.upper())
+    if not state_code:
+        return ""
+
+    name_parts = name.split(" ")
+    first_name = name_parts[0] if name_parts else ""
+    last_name = " ".join(name_parts[1:]) if len(name_parts) > 1 else ""
+
+    if not first_name or not last_name:
+        return ""
+
+    url = f"https://npiregistry.cms.hhs.gov/api/?version=2.1&first_name={first_name}&last_name={last_name}&state={state_code}&limit=5"
+
+    for attempt in range(1, retries + 1):
+        try:
+            response = requests.get(url, timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("result_count", 0) > 0 and data.get("results"):
+                    return data["results"][0].get("number", "")
+            return ""
+        except requests.exceptions.Timeout:
+            print(
+                f"[NPI ERROR] Attempt {attempt} for {name} in {long_state_name}: Timeout"
+            )
+        except requests.exceptions.RequestException as e:
+            print(
+                f"[NPI ERROR] Attempt {attempt} for {name} in {long_state_name}: {e}"
+            )
+        except Exception as e:
+            print(
+                f"[NPI ERROR] Attempt {attempt} for {name} in {long_state_name}: {e}"
+            )
+
+        if attempt < retries:
+            time.sleep(attempt)  # Exponential backoff
+
+    return ""
+
+
 def flatten_clinician_data(c, row_number):
     # Extract first name from full name
     full_name = c.get("Name", "")
@@ -109,11 +218,24 @@ def flatten_clinician_data(c, row_number):
     else:
         scraped_at = str(scraped_field)
 
+    # Get NPI data
+    npi_number = c.get("NPI", "")
+    if not npi_number:
+        # Try to fetch NPI if not already in database
+        listed_in_states = c.get("Listed In States", "")
+        if listed_in_states and full_name:
+            print(f"Fetching NPI for {full_name} in {listed_in_states}")
+            npi_number = fetch_npi(full_name, listed_in_states)
+            if npi_number:
+                print(f"Found NPI for {full_name}: {npi_number}")
+
     return {
         "clinician_id": c.get("clinician_id", ""),
         "Url": c.get("Url", ""),
         "Name": c.get("Name", ""),
-        "NPI": c.get("NPI", ""),
+        "First Name": first_name,
+        "Last Name": " ".join(full_name.split()[1:]) if full_name else "",
+        "NPI": npi_number,
         "Profession": c.get("Profession", ""),
         "Clinic Name": c.get("Clinic Name", ""),
         "Bio": c.get("Bio", ""),
@@ -208,6 +330,8 @@ def export_clinicians_to_excel():
         "clinician_id",
         "Url",
         "Name",
+        "First Name",
+        "Last Name",
         "NPI",
         "Profession",
         "Clinic Name",
