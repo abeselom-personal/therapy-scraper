@@ -43,6 +43,7 @@ services:
       replicas: 0
 
   headway_scraper:
+    user: "0:0"
     build: ./headway_scraper
     container_name: headway_scraper
     depends_on:

@@ -47,3 +47,97 @@
 [2025-10-18T09:56:03.691Z] [INFO] [22/51] Attempt 1: https://www.rula.com/therapists/ma
 [2025-10-18T09:56:03.692Z] [INFO] [23/51] Attempt 1: https://www.rula.com/therapists/mi
 [2025-10-18T09:56:03.708Z] [INFO] [24/51] Attempt 1: https://www.rula.com/therapists/mn
+[2025-10-18T09:56:20.064Z] [INFO] ✓ Saved mn.json with 112 providers
+[2025-10-18T09:56:23.818Z] [INFO] ✓ Saved mi.json with 145 providers
+[2025-10-18T09:56:24.010Z] [INFO] ✓ Saved ma.json with 150 providers
+[2025-10-18T09:56:26.339Z] [INFO] [25/51] Attempt 1: https://www.rula.com/therapists/ms
+[2025-10-18T09:56:26.340Z] [INFO] [27/51] Attempt 1: https://www.rula.com/therapists/mt
+[2025-10-18T09:56:26.340Z] [INFO] [26/51] Attempt 1: https://www.rula.com/therapists/mo
+[2025-10-18T09:56:26.411Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/mt: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/mt", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:26.428Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/mo: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/mo", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:26.654Z] [INFO] [27/51] Attempt 2: https://www.rula.com/therapists/mt
+[2025-10-18T09:56:26.660Z] [INFO] [26/51] Attempt 2: https://www.rula.com/therapists/mo
+[2025-10-18T09:56:26.721Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/mo: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/mo", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:26.722Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/mt: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/mt", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:26.969Z] [INFO] [27/51] Attempt 3: https://www.rula.com/therapists/mt
+[2025-10-18T09:56:26.970Z] [INFO] [26/51] Attempt 3: https://www.rula.com/therapists/mo
+[2025-10-18T09:56:27.040Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/mo: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/mo", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:27.041Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/mt: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/mt", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:35.889Z] [INFO] ✓ Saved ms.json with 67 providers
+[2025-10-18T09:56:38.229Z] [INFO] [28/51] Attempt 1: https://www.rula.com/therapists/ne
+[2025-10-18T09:56:38.230Z] [INFO] [29/51] Attempt 1: https://www.rula.com/therapists/nv
+[2025-10-18T09:56:38.231Z] [INFO] [30/51] Attempt 1: https://www.rula.com/therapists/nh
+[2025-10-18T09:56:38.332Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/nh: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nh", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:38.333Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/nv: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nv", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:38.590Z] [INFO] [29/51] Attempt 2: https://www.rula.com/therapists/nv
+[2025-10-18T09:56:38.590Z] [INFO] [30/51] Attempt 2: https://www.rula.com/therapists/nh
+[2025-10-18T09:56:38.650Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/nh: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nh", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:38.651Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/nv: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nv", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:38.900Z] [INFO] [29/51] Attempt 3: https://www.rula.com/therapists/nv
+[2025-10-18T09:56:38.901Z] [INFO] [30/51] Attempt 3: https://www.rula.com/therapists/nh
+[2025-10-18T09:56:38.967Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/nh: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nh", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:38.968Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/nv: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nv", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:43.543Z] [INFO] ✓ Saved ne.json with 28 providers
+[2025-10-18T09:56:45.903Z] [INFO] [31/51] Attempt 1: https://www.rula.com/therapists/nj
+[2025-10-18T09:56:45.904Z] [INFO] [32/51] Attempt 1: https://www.rula.com/therapists/nm
+[2025-10-18T09:56:45.906Z] [INFO] [33/51] Attempt 1: https://www.rula.com/therapists/ny
+[2025-10-18T09:56:46.026Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/nm: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nm", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:46.184Z] [INFO] [32/51] Attempt 2: https://www.rula.com/therapists/nm
+[2025-10-18T09:56:46.265Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/nm: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nm", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:46.431Z] [INFO] [32/51] Attempt 3: https://www.rula.com/therapists/nm
+[2025-10-18T09:56:46.538Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/nm: page.goto: NS_ERROR_CONNECTION_REFUSED
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nm", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:47.659Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/nj: page.goto: Target page, context or browser has been closed
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/nj", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:47.659Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/ny: page.goto: Target page, context or browser has been closed
+Call log:
+[2m  - navigating to "https://www.rula.com/therapists/ny", waiting until "domcontentloaded"[22m
+
+[2025-10-18T09:56:47.660Z] [ERROR] Failed to scrape batch 30: Error: browser.newContext: Target page, context or browser has been closed
+[2025-10-18T09:56:47.660Z] [ERROR] Failed to scrape batch 32: Error: browser.newContext: Target page, context or browser has been closed
