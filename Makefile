@@ -31,5 +31,6 @@ run-rula-installer:
 alma-scraper-run:
 	docker compose run --rm alma_scraper python scrape.py
 
+
 stop:
 	docker compose down
