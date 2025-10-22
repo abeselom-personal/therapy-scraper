@@ -878,6 +878,7 @@ class AlmaTherapistScraper:
         processed_data = {
             "Url": profile_url,
             "Name": full_name,
+            "NPI": npi_data.get("npi_number"),
             "Profession": profession,
             "Clinic Name": "",
             "Bio": bio,
@@ -1057,6 +1058,7 @@ class AlmaTherapistScraper:
                 "Url",
                 "Name",
                 "Profession",
+                "NPI",
                 "Clinic Name",
                 "Bio",
                 "Additional Focus Areas",
@@ -1091,7 +1093,6 @@ class AlmaTherapistScraper:
                 "Connect Link - Website",
                 "Main Specialties",
                 "Accepted IPs",
-                "NPI",
                 "Sr. NO",
             ]
 
@@ -1176,7 +1177,7 @@ def main():
     logger.info("🎬 Starting Alma Therapist Data Scraper")
 
     # Get configuration from environment
-    pages = int(os.getenv("SCRAPE_PAGES", "3"))
+    pages = int(os.getenv("SCRAPE_PAGES", "17000"))
     limit = int(os.getenv("SCRAPE_PAGE_LIMIT", "15"))
 
     # Initialize the scraper
