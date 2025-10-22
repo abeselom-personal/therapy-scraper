@@ -28,5 +28,8 @@ run-rula-exporter:
 run-rula-installer:
 	docker compose run --rm rula_scraper npx playwright install firefox
 
+alma-scraper-run:
+	docker compose run --rm alma_scraper python scrape.py
+
 stop:
 	docker compose down

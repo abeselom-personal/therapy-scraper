@@ -117,5 +117,49 @@ services:
     volumes:
       - ./rula_scraper:/app
     command: node scrape_detail.js
+
+  alma_scraper:
+    build: ./alma_scraper
+    container_name: alma_scraper
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_DB: alma_scraper_final
+      MONGO_USER: scraper
+      MONGO_PASSWORD: scraper
+      API_URL: https://secure.helloalma.com/api/v1/providerProfiles/search/
+      SCRAPE_LIMIT: 0
+      SCRAPE_PAGES: 3
+      SCRAPE_PAGE_LIMIT: 15
+    volumes:
+      - ./alma_scraper:/app
+      - ./exports:/app/exports
+    command: tail -f /dev/null
+    deploy:
+      replicas: 0
+
+  alma_scraper_run:
+    build: ./alma_scraper
+    container_name: alma_scraper_run
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_DB: alma_scraper_final
+      MONGO_USER: scraper
+      MONGO_PASSWORD: scraper
+      API_URL: https://secure.helloalma.com/api/v1/providerProfiles/search/
+      SCRAPE_LIMIT: 0
+      SCRAPE_PAGES: 3
+      SCRAPE_PAGE_LIMIT: 15
+    volumes:
+      - ./exports:/app/exports
+    command: python scrape.py
+
 volumes:
   mongodb_data:

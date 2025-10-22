@@ -1,143 +1,138 @@
-=== Scraping Session Started: 2025-10-18T09-53-57.725Z ===
+=== Scraping Session Started: 2025-10-22T19-42-50.967Z ===
 
-[2025-10-18T09:53:57.733Z] [INFO] Starting complete scraping process...
-[2025-10-18T09:53:57.734Z] [INFO] Starting parallel state scraping...
-[2025-10-18T09:53:58.827Z] [INFO] [1/51] Attempt 1: https://www.rula.com/therapists/al
-[2025-10-18T09:53:59.016Z] [INFO] [2/51] Attempt 1: https://www.rula.com/therapists/ak
-[2025-10-18T09:53:59.178Z] [INFO] [3/51] Attempt 1: https://www.rula.com/therapists/az
-[2025-10-18T09:54:04.292Z] [INFO] ✓ Saved ak.json with 18 providers
-[2025-10-18T09:54:05.340Z] [INFO] ✓ Saved az.json with 15 providers
-[2025-10-18T09:54:05.733Z] [INFO] ✓ Saved al.json with 30 providers
-[2025-10-18T09:54:08.089Z] [INFO] [6/51] Attempt 1: https://www.rula.com/therapists/co
-[2025-10-18T09:54:08.090Z] [INFO] [4/51] Attempt 1: https://www.rula.com/therapists/ar
-[2025-10-18T09:54:08.092Z] [INFO] [5/51] Attempt 1: https://www.rula.com/therapists/ca
-[2025-10-18T09:54:20.588Z] [INFO] ✓ Saved ar.json with 76 providers
-[2025-10-18T09:54:20.738Z] [INFO] ✓ Saved ca.json with 75 providers
-[2025-10-18T09:54:27.038Z] [INFO] ✓ Saved co.json with 150 providers
-[2025-10-18T09:54:29.359Z] [INFO] [7/51] Attempt 1: https://www.rula.com/therapists/ct
-[2025-10-18T09:54:29.375Z] [INFO] [8/51] Attempt 1: https://www.rula.com/therapists/de
-[2025-10-18T09:54:29.388Z] [INFO] [9/51] Attempt 1: https://www.rula.com/therapists/dc
-[2025-10-18T09:54:35.836Z] [INFO] ✓ Saved de.json with 31 providers
-[2025-10-18T09:54:37.621Z] [INFO] ✓ Saved dc.json with 49 providers
-[2025-10-18T09:54:42.507Z] [INFO] ✓ Saved ct.json with 102 providers
-[2025-10-18T09:54:44.852Z] [INFO] [11/51] Attempt 1: https://www.rula.com/therapists/ga
-[2025-10-18T09:54:44.854Z] [INFO] [12/51] Attempt 1: https://www.rula.com/therapists/hi
-[2025-10-18T09:54:44.854Z] [INFO] [10/51] Attempt 1: https://www.rula.com/therapists/fl
-[2025-10-18T09:54:58.453Z] [INFO] ✓ Saved hi.json with 90 providers
-[2025-10-18T09:55:04.460Z] [INFO] ✓ Saved fl.json with 150 providers
-[2025-10-18T09:55:04.572Z] [INFO] ✓ Saved ga.json with 150 providers
-[2025-10-18T09:55:07.042Z] [INFO] [13/51] Attempt 1: https://www.rula.com/therapists/id
-[2025-10-18T09:55:07.043Z] [INFO] [15/51] Attempt 1: https://www.rula.com/therapists/in
-[2025-10-18T09:55:07.043Z] [INFO] [14/51] Attempt 1: https://www.rula.com/therapists/il
-[2025-10-18T09:55:13.988Z] [INFO] ✓ Saved id.json with 42 providers
-[2025-10-18T09:55:26.265Z] [INFO] ✓ Saved il.json with 150 providers
-[2025-10-18T09:55:26.591Z] [INFO] ✓ Saved in.json with 137 providers
-[2025-10-18T09:55:28.927Z] [INFO] [17/51] Attempt 1: https://www.rula.com/therapists/ks
-[2025-10-18T09:55:28.927Z] [INFO] [16/51] Attempt 1: https://www.rula.com/therapists/ia
-[2025-10-18T09:55:28.942Z] [INFO] [18/51] Attempt 1: https://www.rula.com/therapists/ky
-[2025-10-18T09:55:34.921Z] [INFO] ✓ Saved ia.json with 25 providers
-[2025-10-18T09:55:37.719Z] [INFO] ✓ Saved ks.json with 48 providers
-[2025-10-18T09:55:39.394Z] [INFO] ✓ Saved ky.json with 71 providers
-[2025-10-18T09:55:41.732Z] [INFO] [19/51] Attempt 1: https://www.rula.com/therapists/la
-[2025-10-18T09:55:41.737Z] [INFO] [21/51] Attempt 1: https://www.rula.com/therapists/md
-[2025-10-18T09:55:41.738Z] [INFO] [20/51] Attempt 1: https://www.rula.com/therapists/me
-[2025-10-18T09:55:50.465Z] [INFO] ✓ Saved me.json with 51 providers
-[2025-10-18T09:55:59.514Z] [INFO] ✓ Saved la.json with 121 providers
-[2025-10-18T09:56:01.282Z] [INFO] ✓ Saved md.json with 150 providers
-[2025-10-18T09:56:03.691Z] [INFO] [22/51] Attempt 1: https://www.rula.com/therapists/ma
-[2025-10-18T09:56:03.692Z] [INFO] [23/51] Attempt 1: https://www.rula.com/therapists/mi
-[2025-10-18T09:56:03.708Z] [INFO] [24/51] Attempt 1: https://www.rula.com/therapists/mn
-[2025-10-18T09:56:20.064Z] [INFO] ✓ Saved mn.json with 112 providers
-[2025-10-18T09:56:23.818Z] [INFO] ✓ Saved mi.json with 145 providers
-[2025-10-18T09:56:24.010Z] [INFO] ✓ Saved ma.json with 150 providers
-[2025-10-18T09:56:26.339Z] [INFO] [25/51] Attempt 1: https://www.rula.com/therapists/ms
-[2025-10-18T09:56:26.340Z] [INFO] [27/51] Attempt 1: https://www.rula.com/therapists/mt
-[2025-10-18T09:56:26.340Z] [INFO] [26/51] Attempt 1: https://www.rula.com/therapists/mo
-[2025-10-18T09:56:26.411Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/mt: page.goto: NS_ERROR_CONNECTION_REFUSED
+[2025-10-22T19:42:50.967Z] [INFO] Starting complete scraping process...
+[2025-10-22T19:42:50.968Z] [INFO] Starting parallel state scraping...
+[2025-10-22T19:42:52.411Z] [INFO] [1/51] Attempt 1: https://www.rula.com/therapists/al
+[2025-10-22T19:42:52.633Z] [INFO] [2/51] Attempt 1: https://www.rula.com/therapists/ak
+[2025-10-22T19:42:52.834Z] [INFO] [3/51] Attempt 1: https://www.rula.com/therapists/az
+[2025-10-22T19:43:01.929Z] [INFO] ✓ Saved ak.json with 16 providers
+[2025-10-22T19:43:04.356Z] [WARN] Load more click failed on attempt 3: elementHandle.click: Target page, context or browser has been closed
+Browser logs:
+
+<launching> /home/abeselom/.cache/ms-playwright/firefox-1495/firefox/firefox -no-remote -headless -profile /tmp/playwright_firefoxdev_profile-pp4tVY -juggler-pipe -silent
+<launched> pid=20250
+[pid=20250][err] *** You are running in headless mode.
+[pid=20250][err] JavaScript warning: resource://services-settings/Utils.sys.mjs, line 116: unreachable code after return statement
+[pid=20250][out] console.warn: services.settings: Ignoring preference override of remote settings server
+[pid=20250][out] console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+[pid=20250][out] 
+[pid=20250][out] Juggler listening to the pipe
+[pid=20250][out] console.error: services.settings: 
+[pid=20250][out]   Message: EmptyDatabaseError: "main/nimbus-desktop-experiments" has not been synced yet
+[pid=20250][out]   Stack:
+[pid=20250][out]     EmptyDatabaseError@resource://services-settings/Database.sys.mjs:19:5
+[pid=20250][out] list@resource://services-settings/Database.sys.mjs:96:13
+[pid=20250][out] 
+[pid=20250][out] console.error: services.settings: 
+[pid=20250][out]   Message: EmptyDatabaseError: "main/nimbus-secure-experiments" has not been synced yet
+[pid=20250][out]   Stack:
+[pid=20250][out]     EmptyDatabaseError@resource://services-settings/Database.sys.mjs:19:5
+[pid=20250][out] list@resource://services-settings/Database.sys.mjs:96:13
+[pid=20250][out] 
+[pid=20250][out] console.warn: services.settings: #fetchAttachment: Forcing fallbackToDump to false due to Utils.LOAD_DUMPS being false
+[pid=20250][out] console.error: (new NotFoundError("Could not find fa0fc42c-d91d-fca7-34eb-806ff46062dc in cache or dump", "resource://services-settings/Attachments.sys.mjs", 48))
+[pid=20250][out] console.warn: "Unable to find the attachment for" "fa0fc42c-d91d-fca7-34eb-806ff46062dc"
+[pid=20250][err] JavaScript warning: https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js, line 1: Script terminated by timeout at:
+[pid=20250][err] 83146/q/<@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:974
+[pid=20250][err] EventListener.handleEvent*83146/tA/<@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:8106
+[pid=20250][err] tA@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:8077
+[pid=20250][err] 83146/i$</tr<@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:116902
+[pid=20250][err] 83146/i$<@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:117655
+[pid=20250][err] 83146/p<@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:104447
+[pid=20250][err] h@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:94933
+[pid=20250][err] m@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:102600
+[pid=20250][err] init@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:103400
+[pid=20250][err] 83146/o<.init<@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:104943
+[pid=20250][err] G@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:1036
+[pid=20250][err] 83146/q/<@https://www.rula.com/_next/static/chunks/5544-170794b49a2aaf34.js:1:984
+[pid=20250][err] 5493/c/<@https://www.rula.com/_next/static/chunks/app/layout-c66a352a84b3bdd9.js:1:430
+[pid=20250][err] aW@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:73244
+[pid=20250][err] oe@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:84687
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85323
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85305
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85305
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85305
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85305
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85305
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85305
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85305
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:86270
+[pid=20250][err] or@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85209
+[pid=20250][err] ol@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:85346
+[pid=20250][err] id@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:108717
+[pid=20250][err] nb@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:26763
+[pid=20250][err] 84417/is/<@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:108300
+[pid=20250][err] is@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:108308
+[pid=20250][err] o1@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:93002
+[pid=20250][err] oZ@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:92157
+[pid=20250][err] T@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:1:84277
+[pid=20250][err] EventHandlerNonNull*12010@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:1:84664
+[pid=20250][err] l@https://www.rula.com/_next/static/chunks/webpack-690ed0e0d30b8688.js:1:167
+[pid=20250][err] 71767@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:1:86432
+[pid=20250][err] l@https://www.rula.com/_next/static/chunks/webpack-690ed0e0d30b8688.js:1:167
+[pid=20250][err] 84417@https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:119
+[pid=20250][err] l@https://www.rula.com/_next/static/chunks/webpack-690ed0e0d30b8688.js:1:167
+[pid=20250][err] 54887@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:2:12953
+[pid=20250][err] l@https://www.rula.com/_next/static/chunks/webpack-690ed0e0d30b8688.js:1:167
+[pid=20250][err] 34040@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:2:12640
+[pid=20250][err] l@https://www.rula.com/_next/static/chunks/webpack-690ed0e0d30b8688.js:1:167
+[pid=20250][err] 92304@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:1:3801
+[pid=20250][err] l@https://www.rula.com/_next/static/chunks/webpack-690ed0e0d30b8688.js:1:167
+[pid=20250][err] 54278/<@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:1:5781
+[pid=20250][err] n@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:1:2232
+[pid=20250][err] n@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:1:2593
+[pid=20250][err] 54278@https://www.rula.com/_next/static/chunks/2117-2c62f61888aae70c.js:1:5759
+[pid=20250][err] l@https://www.rula.com/_next/static/chunks/webpack-690ed0e0d30b8688.js:1:167
+[pid=20250][err] n@https://www.rula.com/_next/static/chunks/main-app-fb757dbf2494d41f.js:1:392
+[pid=20250][err] @https://www.rula.com/_next/static/chunks/main-app-fb757dbf2494d41f.js:1:439
+[pid=20250][err] l.O@https://www.rula.com/_next/static/chunks/webpack-690ed0e0d30b8688.js:1:593
+[pid=20250][err] c@https://www.rula.com/_next/static/chunks/webpack-690ed0e0d30b8688.js:1:4862
+[pid=20250][err] @https://www.rula.com/_next/static/chunks/fd9d1056-1037d6bbf9ed4901.js:1:64
+[pid=20250][err] 
+[pid=20250][err] JavaScript error: chrome://juggler/content/Helper.js, line 82: NS_ERROR_FAILURE: Component returned failure code: 0x80004005 (NS_ERROR_FAILURE) [nsIWebProgress.removeProgressListener]
+[pid=20250] <gracefully close start>
 Call log:
-[2m  - navigating to "https://www.rula.com/therapists/mt", waiting until "domcontentloaded"[22m
+[2m  - attempting click action[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - performing click action[22m
 
-[2025-10-18T09:56:26.428Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/mo: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/mo", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:26.654Z] [INFO] [27/51] Attempt 2: https://www.rula.com/therapists/mt
-[2025-10-18T09:56:26.660Z] [INFO] [26/51] Attempt 2: https://www.rula.com/therapists/mo
-[2025-10-18T09:56:26.721Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/mo: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/mo", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:26.722Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/mt: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/mt", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:26.969Z] [INFO] [27/51] Attempt 3: https://www.rula.com/therapists/mt
-[2025-10-18T09:56:26.970Z] [INFO] [26/51] Attempt 3: https://www.rula.com/therapists/mo
-[2025-10-18T09:56:27.040Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/mo: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/mo", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:27.041Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/mt: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/mt", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:35.889Z] [INFO] ✓ Saved ms.json with 67 providers
-[2025-10-18T09:56:38.229Z] [INFO] [28/51] Attempt 1: https://www.rula.com/therapists/ne
-[2025-10-18T09:56:38.230Z] [INFO] [29/51] Attempt 1: https://www.rula.com/therapists/nv
-[2025-10-18T09:56:38.231Z] [INFO] [30/51] Attempt 1: https://www.rula.com/therapists/nh
-[2025-10-18T09:56:38.332Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/nh: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nh", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:38.333Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/nv: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nv", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:38.590Z] [INFO] [29/51] Attempt 2: https://www.rula.com/therapists/nv
-[2025-10-18T09:56:38.590Z] [INFO] [30/51] Attempt 2: https://www.rula.com/therapists/nh
-[2025-10-18T09:56:38.650Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/nh: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nh", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:38.651Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/nv: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nv", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:38.900Z] [INFO] [29/51] Attempt 3: https://www.rula.com/therapists/nv
-[2025-10-18T09:56:38.901Z] [INFO] [30/51] Attempt 3: https://www.rula.com/therapists/nh
-[2025-10-18T09:56:38.967Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/nh: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nh", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:38.968Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/nv: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nv", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:43.543Z] [INFO] ✓ Saved ne.json with 28 providers
-[2025-10-18T09:56:45.903Z] [INFO] [31/51] Attempt 1: https://www.rula.com/therapists/nj
-[2025-10-18T09:56:45.904Z] [INFO] [32/51] Attempt 1: https://www.rula.com/therapists/nm
-[2025-10-18T09:56:45.906Z] [INFO] [33/51] Attempt 1: https://www.rula.com/therapists/ny
-[2025-10-18T09:56:46.026Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/nm: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nm", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:46.184Z] [INFO] [32/51] Attempt 2: https://www.rula.com/therapists/nm
-[2025-10-18T09:56:46.265Z] [ERROR] Attempt 2 failed for https://www.rula.com/therapists/nm: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nm", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:46.431Z] [INFO] [32/51] Attempt 3: https://www.rula.com/therapists/nm
-[2025-10-18T09:56:46.538Z] [ERROR] Attempt 3 failed for https://www.rula.com/therapists/nm: page.goto: NS_ERROR_CONNECTION_REFUSED
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nm", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:47.659Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/nj: page.goto: Target page, context or browser has been closed
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/nj", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:47.659Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/ny: page.goto: Target page, context or browser has been closed
-Call log:
-[2m  - navigating to "https://www.rula.com/therapists/ny", waiting until "domcontentloaded"[22m
-
-[2025-10-18T09:56:47.660Z] [ERROR] Failed to scrape batch 30: Error: browser.newContext: Target page, context or browser has been closed
-[2025-10-18T09:56:47.660Z] [ERROR] Failed to scrape batch 32: Error: browser.newContext: Target page, context or browser has been closed
+[2025-10-22T19:43:04.357Z] [ERROR] Attempt 1 failed for https://www.rula.com/therapists/al: page.$$eval: Target page, context or browser has been closed
