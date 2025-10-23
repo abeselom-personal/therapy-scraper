@@ -132,7 +132,7 @@ services:
       MONGO_PASSWORD: scraper
       API_URL: https://secure.helloalma.com/api/v1/providerProfiles/search/
       SCRAPE_LIMIT: 0
-      SCRAPE_PAGES: 3
+      SCRAPE_PAGES: 1
       SCRAPE_PAGE_LIMIT: 15
     volumes:
       - ./alma_scraper:/app

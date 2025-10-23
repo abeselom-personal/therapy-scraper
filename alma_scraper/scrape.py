@@ -8,7 +8,7 @@ import uuid
 from collections import Counter
 from datetime import date, datetime, timedelta
 from typing import Any, Dict, List, Optional
-from urllib.parse import urljoin
+from urllib.parse import parse_qs, urljoin, urlparse
 
 import pandas as pd
 import requests
@@ -111,13 +111,9 @@ class AlmaTherapistScraper:
         Returns:
             Dictionary containing NPI data or None if not found
         """
-        print(data)
         first_name = data.get("first_name", "").strip()
         last_name = data.get("last_name", "").strip()
-        licensure_states = data.get("licensureStates", [])
-        print(first_name)
-        print(last_name)
-        print(licensure_states)
+        licensure_states = data.get("licensure_states", [])
 
         if not first_name or not last_name:
             logger.warning("⚠️  Missing first or last name for NPI lookup")
@@ -531,17 +527,25 @@ class AlmaTherapistScraper:
             return False
 
     def fetch_provider_list(
-        self, page: int = 1, limit: int = 15
+        self, url: str = None, page: int = 1, limit: int = 15
     ) -> Optional[Dict]:
-        """Fetch the list of providers from Alma API with pagination."""
-        url = f"{self.base_url}/api/v1/providerProfiles/search/"
-        params = {"page": page, "limit": limit}
-
-        logger.info(f"🌐 Fetching provider list - Page {page}, Limit {limit}")
+        """Fetch the list of providers from Alma API with pagination or next URL."""
+        if url:
+            # Use the provided next URL
+            full_url = urljoin(self.base_url, url)
+            logger.info(f"🌐 Fetching next page: {url}")
+        else:
+            # Use initial URL with parameters
+            full_url = f"{self.base_url}/api/v1/providerProfiles/search/"
+            params = {"page": page, "limit": limit}
+            logger.info(f"🌐 Fetching provider list - Page {page}, Limit {limit}")
 
         try:
             start_time = time.time()
-            response = self.session.get(url, params=params, timeout=30)
+            if url:
+                response = self.session.get(full_url, timeout=30)
+            else:
+                response = self.session.get(full_url, params=params, timeout=30)
             response_time = time.time() - start_time
 
             logger.info(
@@ -553,13 +557,20 @@ class AlmaTherapistScraper:
                 total_count = data.get("count", 0)
                 results_count = len(data.get("results", []))
                 additional_count = len(data.get("additionalResults", []))
+                next_url = data.get("next")
+                previous_url = data.get("previous")
 
                 logger.info(
                     f"📊 Data summary - Total: {total_count:,}, Results: {results_count}, Additional: {additional_count}"
                 )
+                if next_url:
+                    logger.info(f"➡️ Next page available: {next_url}")
+                else:
+                    logger.info("⏹️ No more pages available")
+                
                 return data
             else:
-                logger.warning(f"⚠️  Non-200 response: {response.status_code}")
+                logger.warning(f"⚠️ Non-200 response: {response.status_code}")
                 return None
 
         except requests.exceptions.Timeout:
@@ -572,7 +583,7 @@ class AlmaTherapistScraper:
             return None
 
     def extract_all_provider_data(self, api_data: Dict) -> List[Dict]:
-        """Extract all provider data from the API response."""
+        """Extract all provider data from the API response including additionalResults."""
         all_providers = []
 
         api_metadata = {
@@ -615,17 +626,29 @@ class AlmaTherapistScraper:
         self, provider: Dict, index: int, source: str
     ) -> Dict:
         """Extract complete details from a single provider object."""
-        provider_id = provider.get("providerId", f"unknown_{index}")
+        # Handle both main and additional results structure
+        if source == "main":
+            provider_id = provider.get("providerId", f"unknown_{index}")
+            profile_id = provider.get("providerProfileId", "")
+            slug = provider.get("providerSlug", "")
+            first_name = provider.get("providerFirstName", "")
+            last_name = provider.get("providerLastName", "")
+        else:  # additional results
+            provider_id = provider.get("providerId", f"unknown_additional_{index}")
+            profile_id = provider.get("providerProfileId", "")
+            slug = provider.get("providerSlug", "")
+            first_name = provider.get("providerFirstName", "")
+            last_name = provider.get("providerLastName", "")
 
         # Basic provider information
         basic_info = {
             "source": source,
             "provider_id": provider_id,
-            "profile_id": provider.get("providerProfileId", ""),
-            "slug": provider.get("providerSlug", ""),
-            "name": f"{provider.get('providerFirstName', '')} {provider.get('providerLastName', '')}".strip(),
-            "first_name": provider.get("providerFirstName", ""),
-            "last_name": provider.get("providerLastName", ""),
+            "profile_id": profile_id,
+            "slug": slug,
+            "name": f"{first_name} {last_name}".strip(),
+            "first_name": first_name,
+            "last_name": last_name,
             "title": provider.get("title", ""),
             "summary": provider.get("summary", ""),
             "profile_photo": provider.get("profilePhoto", ""),
@@ -635,16 +658,29 @@ class AlmaTherapistScraper:
             "accepted_insurance_slugs": provider.get(
                 "acceptedInsuranceSlugs", []
             ),
+            "verified_accepted_insurance_slugs": provider.get(
+                "verifiedAcceptedInsuranceSlugs", []
+            ),
+            "self_schedule_availability": provider.get("selfScheduleAvailability"),
+            "is_blue_cross_blue_shield": provider.get("isBlueCrossBlueShield", False),
+            "is_care_connect": provider.get("isCareConnect", False),
         }
 
         # Extract and categorize filterables
         filterables = provider.get("filterables", [])
         categorized_filterables = self.categorize_filterables(filterables)
 
+        # Extract provider locations and neighborhoods
+        provider_locations = provider.get("providerLocations", [])
+        provider_neighborhoods = provider.get("providerNeighborhoods", [])
+
         complete_provider_data = {
             **basic_info,
             "filterables": filterables,
             "categorized_filterables": categorized_filterables,
+            "provider_locations": provider_locations,
+            "provider_neighborhoods": provider_neighborhoods,
+            "distance_to_provider": provider.get("distanceToProvider"),
             "raw_data": provider,
         }
 
@@ -671,6 +707,7 @@ class AlmaTherapistScraper:
             "session_availability": [],
             "insurance_providers": [],
             "languages": [],
+            "therapeutic_styles": [],
         }
 
         for item in filterables:
@@ -710,6 +747,8 @@ class AlmaTherapistScraper:
                 categories["session_availability"].append(name)
             elif slug.startswith("language_"):
                 categories["languages"].append(name)
+            elif slug.startswith("therapeutic_style_"):
+                categories["therapeutic_styles"].append(name)
 
         return categories
 
@@ -878,7 +917,7 @@ class AlmaTherapistScraper:
         processed_data = {
             "Url": profile_url,
             "Name": full_name,
-            "NPI": npi_data.get("npi_number"),
+            "NPI": npi_data.get("npi_number") if npi_data else "",
             "Profession": profession,
             "Clinic Name": "",
             "Bio": bio,
@@ -916,9 +955,9 @@ class AlmaTherapistScraper:
             "Connect Link - Website": "",
             "Main Specialties": all_specialties,
             "Accepted IPs": "Various",
-            "NPI": npi_data.get("npi_number") if npi_data else "",
             "Sr. NO": provider_id,
             "provider_id": provider_id,
+            "source": provider_data.get("source", "unknown"),
             # Store comprehensive data
             "raw_data": provider_data,
             "npi_data": npi_data,  # Store full NPI data
@@ -934,30 +973,52 @@ class AlmaTherapistScraper:
 
         return processed_data
 
-    def scrape_and_store(self, pages: int = 1, limit: int = 15) -> List[Dict]:
-        """Main method to scrape data from multiple pages and store."""
+    def scrape_and_store(self, max_pages: int = None, limit: int = 15) -> List[Dict]:
+        """Main method to scrape data by following next links until null."""
         all_processed_data = []
         total_providers_processed = 0
         successful_storages = 0
         npi_found_count = 0
+        page_count = 0
 
         logger.info(
-            f"🚀 Starting scraping process - Pages: {pages}, Limit: {limit}"
+            f"🚀 Starting scraping process - Following next links until null"
         )
+        if max_pages:
+            logger.info(f"📄 Maximum pages to scrape: {max_pages}")
 
-        for page in range(1, pages + 1):
-            logger.info(f"📄 Processing page {page}/{pages}...")
+        current_url = None  # Start with initial page
+        has_more_pages = True
 
-            provider_data = self.fetch_provider_list(page=page, limit=limit)
+        while has_more_pages:
+            page_count += 1
+            if max_pages and page_count > max_pages:
+                logger.info(f"⏹️ Reached maximum page limit: {max_pages}")
+                break
+
+            logger.info(f"📄 Processing page {page_count}...")
+
+            # Fetch provider data
+            if current_url:
+                provider_data = self.fetch_provider_list(url=current_url)
+            else:
+                provider_data = self.fetch_provider_list(page=1, limit=limit)
+
             if not provider_data:
-                logger.warning(f"⚠️  Skipping page {page} due to fetch failure")
-                continue
+                logger.warning(f"⚠️ Skipping page {page_count} due to fetch failure")
+                # Try to continue with next URL if available
+                if provider_data and provider_data.get('next'):
+                    current_url = provider_data.get('next')
+                    continue
+                else:
+                    break
 
+            # Extract and process providers from this page
             all_extracted_providers = self.extract_all_provider_data(
                 provider_data
             )
             logger.info(
-                f"📊 Extracted {len(all_extracted_providers)} providers from API response"
+                f"📊 Extracted {len(all_extracted_providers)} providers from page {page_count}"
             )
 
             page_processed_count = 0
@@ -989,17 +1050,25 @@ class AlmaTherapistScraper:
                     continue
 
             logger.info(
-                f"📊 Page {page} completed: {page_processed_count} providers processed, {page_successful_storages} stored, {page_npi_found} NPI found"
+                f"📊 Page {page_count} completed: {page_processed_count} providers processed, {page_successful_storages} stored, {page_npi_found} NPI found"
             )
 
-            # Add delay between pages
-            if page < pages:
+            # Check for next page
+            next_url = provider_data.get('next')
+            if next_url:
+                current_url = next_url
+                logger.info(f"➡️ Moving to next page: {next_url}")
+                
+                # Add delay between pages
                 delay = 2
                 logger.info(f"⏳ Waiting {delay} seconds before next page...")
                 time.sleep(delay)
+            else:
+                logger.info("⏹️ No more pages available - scraping complete!")
+                has_more_pages = False
 
         logger.info("🎉 Scraping completed successfully!")
-        logger.info(f"📈 Total pages processed: {pages}")
+        logger.info(f"📈 Total pages processed: {page_count}")
         logger.info(
             f"👥 Total providers processed: {total_providers_processed}"
         )
@@ -1177,7 +1246,7 @@ def main():
     logger.info("🎬 Starting Alma Therapist Data Scraper")
 
     # Get configuration from environment
-    pages = int(os.getenv("SCRAPE_PAGES", "17000"))
+    max_pages = int(os.getenv("SCRAPE_MAX_PAGES", "0")) or None  # 0 means no limit
     limit = int(os.getenv("SCRAPE_PAGE_LIMIT", "15"))
 
     # Initialize the scraper
@@ -1187,12 +1256,12 @@ def main():
         # Display startup information
         logger.info("🚀 Configuration:")
         logger.info(f"   • Target: Hello Alma Therapist Directory")
-        logger.info(f"   • Pages: {pages}")
+        logger.info(f"   • Max Pages: {max_pages if max_pages else 'No limit (follow next links)'}")
         logger.info(f"   • Limit per page: {limit}")
 
         # Scrape data
         logger.info("🌐 Beginning data scraping process...")
-        scraper.scrape_and_store(pages=pages, limit=limit)
+        scraper.scrape_and_store(max_pages=max_pages, limit=limit)
 
         # Export to Excel
         logger.info("💾 Beginning Excel export process...")
