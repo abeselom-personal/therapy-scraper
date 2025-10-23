@@ -493,32 +493,46 @@ class AlmaTherapistScraper:
             logger.error(f"❌ Error saving local backup: {e}")
 
     def store_data(self, processed_data: Dict) -> bool:
-        """Store processed data in MongoDB or local storage."""
+        """Store processed data in MongoDB or local storage with size optimization."""
         try:
+            # Create a storage-optimized version (exclude very large fields)
+            storage_data = processed_data.copy()
+            
+            # Remove or truncate very large fields for MongoDB
+            large_fields = ["raw_data", "npi_data"]
+            for field in large_fields:
+                if field in storage_data:
+                    if field == "npi_data" and storage_data[field]:
+                        # Keep only essential NPI fields, remove raw response
+                        if "raw_npi_response" in storage_data[field]:
+                            storage_data[field]["raw_npi_response"] = "TRUNCATED"
+                    elif field == "raw_data":
+                        storage_data[field] = "TRUNCATED"  # Or remove entirely
+        
             if self.use_mongodb:
                 result = self.collection.update_one(
-                    {"provider_id": processed_data["provider_id"]},
-                    {"$set": processed_data},
+                    {"provider_id": storage_data["provider_id"]},
+                    {"$set": storage_data},
                     upsert=True,
                 )
                 if result.upserted_id:
                     logger.debug(
-                        f"💾 New MongoDB record inserted for {processed_data['Name']}"
+                        f"💾 New MongoDB record inserted for {storage_data['Name']}"
                     )
                 else:
                     logger.debug(
-                        f"🔄 Existing MongoDB record updated for {processed_data['Name']}"
+                        f"🔄 Existing MongoDB record updated for {storage_data['Name']}"
                     )
             else:
                 self.local_data = [
                     data
                     for data in self.local_data
-                    if data.get("provider_id") != processed_data["provider_id"]
+                    if data.get("provider_id") != storage_data["provider_id"]
                 ]
-                self.local_data.append(processed_data)
+                self.local_data.append(storage_data)
                 self.save_local_backup()
                 logger.debug(
-                    f"💾 Local record stored for {processed_data['Name']}"
+                    f"💾 Local record stored for {storage_data['Name']}"
                 )
 
             return True
@@ -1004,14 +1018,18 @@ class AlmaTherapistScraper:
             else:
                 provider_data = self.fetch_provider_list(page=1, limit=limit)
 
+            # FIX: Proper error handling
             if not provider_data:
-                logger.warning(f"⚠️ Skipping page {page_count} due to fetch failure")
-                # Try to continue with next URL if available
-                if provider_data and provider_data.get('next'):
-                    current_url = provider_data.get('next')
-                    continue
-                else:
-                    break
+                logger.error(f"❌ Failed to fetch page {page_count}, stopping")
+                break
+
+            # Check if we have any results
+            results = provider_data.get('results', [])
+            additional = provider_data.get('additionalResults', [])
+            
+            if not results and not additional:
+                logger.warning("🛑 No results found, stopping pagination")
+                break
 
             # Extract and process providers from this page
             all_extracted_providers = self.extract_all_provider_data(
@@ -1079,38 +1097,111 @@ class AlmaTherapistScraper:
 
         return all_processed_data
 
+    def debug_data_status(self):
+        """Debug method to check data status."""
+        logger.info("🔍 Debugging data status...")
+        
+        if self.use_mongodb:
+            total_count = self.collection.count_documents({})
+            logger.info(f"📊 MongoDB total records: {total_count}")
+            
+            # Check document sizes
+            try:
+                pipeline = [
+                    {"$project": {"size": {"$bsonSize": "$$ROOT"}}},
+                    {"$group": {"_id": None, "avgSize": {"$avg": "$size"}, "maxSize": {"$max": "$size"}}}
+                ]
+                
+                size_stats = list(self.collection.aggregate(pipeline))
+                if size_stats:
+                    logger.info(f"📊 Document size - Avg: {size_stats[0]['avgSize']:.0f} bytes, Max: {size_stats[0]['maxSize']} bytes")
+                    
+                    # Check if any documents are approaching 16MB limit
+                    if size_stats[0]['maxSize'] > 15000000:  # 15MB
+                        logger.warning("⚠️ Some documents are approaching 16MB MongoDB limit!")
+                        
+            except Exception as e:
+                logger.warning(f"⚠️ Could not get size stats: {e}")
+        else:
+            logger.info(f"📊 Local storage records: {len(self.local_data)}")
+
+    def _debug_data_issues(self, data_list: List[Dict]):
+        """Debug method to identify problematic records."""
+        logger.info("🔍 Debugging data issues...")
+        
+        for i, item in enumerate(data_list):
+            try:
+                # Check for very large items
+                item_size = len(str(item))
+                if item_size > 1000000:  # 1MB
+                    logger.warning(f"⚠️ Large record {i}: {item_size} bytes")
+                    
+                # Check for non-serializable data
+                json.dumps(item)
+                
+            except Exception as e:
+                logger.error(f"❌ Problematic record {i}: {e}")
+                logger.error(f"   Record keys: {list(item.keys()) if isinstance(item, dict) else 'Not a dict'}")
+
+    def _fallback_export(self, data_list: List[Dict], filename: str) -> pd.DataFrame:
+        """Fallback export method if primary method fails."""
+        logger.info("🔄 Using fallback export method")
+        
+        try:
+            # Export in chunks to avoid memory issues
+            chunk_size = 1000
+            chunks = [data_list[i:i + chunk_size] for i in range(0, len(data_list), chunk_size)]
+            
+            with pd.ExcelWriter(filename, engine='openpyxl') as writer:
+                for i, chunk in enumerate(chunks):
+                    df_chunk = pd.DataFrame(chunk)
+                    sheet_name = f"Therapists_{i+1}"
+                    df_chunk.to_excel(writer, sheet_name=sheet_name, index=False)
+                    
+            logger.info(f"✅ Fallback export completed: {filename}")
+            return pd.DataFrame(data_list)
+            
+        except Exception as e:
+            logger.error(f"❌ Fallback export also failed: {e}")
+            return pd.DataFrame()
+
     def export_to_excel(
         self, filename: str = "exports/alma_therapists_export.xlsx"
     ) -> pd.DataFrame:
-        """Export data from storage to Excel."""
+        """Export data from storage to Excel with proper data handling."""
         logger.info(f"💾 Exporting data to Excel: {filename}")
 
         try:
-            # Get data from appropriate source
+            # Get data from appropriate source with projection to avoid large documents
             if self.use_mongodb:
-                cursor = self.collection.find(
-                    {},
-                    {
-                        "raw_data": 0,
-                        "scraped_at": 0,
-                        "_id": 0,
-                        "processed_at": 0,
-                        "npi_data": 0,  # Exclude full NPI data from Excel
-                    },
-                )
+                # Use projection to exclude large fields that might cause issues
+                projection = {
+                    "raw_data": 0,
+                    "npi_data.raw_npi_response": 0,  # Exclude the largest field
+                    "scraped_at": 0,
+                    "_id": 0,
+                    "processed_at": 0,
+                }
+                
+                # Get count first to debug
+                total_count = self.collection.count_documents({})
+                logger.info(f"📊 Total documents in MongoDB: {total_count}")
+                
+                cursor = self.collection.find({}, projection)
                 data_list = list(cursor)
+                logger.info(f"📊 Documents retrieved for export: {len(data_list)}")
+                
             else:
                 data_list = []
                 for item in self.local_data:
                     cleaned_item = {
                         k: v
                         for k, v in item.items()
-                        if k
-                        not in [
+                        if k not in [
                             "raw_data",
-                            "scraped_at",
+                            "scraped_at", 
                             "processed_at",
-                            "npi_data",
+                            "npi_data",  # Remove entire npi_data for local storage
                         ]
                     }
                     data_list.append(cleaned_item)
@@ -1119,50 +1210,30 @@ class AlmaTherapistScraper:
                 logger.warning("⚠️  No data found to export")
                 return pd.DataFrame()
 
-            # Convert to DataFrame
-            df = pd.DataFrame(data_list)
+            logger.info(f"🔧 Processing {len(data_list)} records for Excel export")
+            
+            # Convert to DataFrame with error handling
+            try:
+                df = pd.DataFrame(data_list)
+                logger.info(f"📊 DataFrame created with {len(df)} rows and {len(df.columns)} columns")
+            except Exception as e:
+                logger.error(f"❌ Error creating DataFrame: {e}")
+                # Try to identify problematic records
+                self._debug_data_issues(data_list)
+                return pd.DataFrame()
 
             # Expected columns in order (including NPI)
             expected_columns = [
-                "Url",
-                "Name",
-                "Profession",
-                "NPI",
-                "Clinic Name",
-                "Bio",
-                "Additional Focus Areas",
-                "Treatment Approaches",
-                "Appointment Types",
-                "Communities",
-                "Age Groups",
-                "Languages",
-                "Highlights",
-                "Gender",
-                "Pronouns",
-                "Race Ethnicity",
-                "Licenses",
-                "Locations",
-                "Education",
-                "Faiths",
-                "Min Session Price",
-                "Max Session Price",
-                "Pay Out Of Pocket Status",
-                "Individual Service Rates",
-                "General Payment Options",
-                "Booking Summary",
-                "Booking Url",
-                "Listed In States",
-                "States",
-                "Listed In Websites",
-                "Urls",
-                "Connect Link - Facebook",
-                "Connect Link - Instagram",
-                "Connect Link - LinkedIn",
-                "Connect Link - Twitter",
-                "Connect Link - Website",
-                "Main Specialties",
-                "Accepted IPs",
-                "Sr. NO",
+                "Url", "Name", "Profession", "NPI", "Clinic Name", "Bio", 
+                "Additional Focus Areas", "Treatment Approaches", "Appointment Types",
+                "Communities", "Age Groups", "Languages", "Highlights", "Gender",
+                "Pronouns", "Race Ethnicity", "Licenses", "Locations", "Education",
+                "Faiths", "Min Session Price", "Max Session Price", "Pay Out Of Pocket Status",
+                "Individual Service Rates", "General Payment Options", "Booking Summary",
+                "Booking Url", "Listed In States", "States", "Listed In Websites", "Urls",
+                "Connect Link - Facebook", "Connect Link - Instagram", "Connect Link - LinkedIn",
+                "Connect Link - Twitter", "Connect Link - Website", "Main Specialties",
+                "Accepted IPs", "Sr. NO", "provider_id", "source"
             ]
 
             # Add missing columns with empty values
@@ -1170,19 +1241,25 @@ class AlmaTherapistScraper:
                 if col not in df.columns:
                     df[col] = ""
 
-            # Reorder columns
+            # Reorder columns to match expected format
             df = df[expected_columns]
 
             # Ensure exports directory exists
             os.makedirs(os.path.dirname(filename), exist_ok=True)
 
-            # Export to Excel
-            df.to_excel(filename, index=False, engine="openpyxl")
-            logger.info(f"✅ Excel file created successfully: {filename}")
-            logger.info(f"📊 Export Summary: {len(df)} therapists")
-            logger.info(f"🆔 NPI Records in Export: {df['NPI'].notna().sum()}")
+            # Export to Excel with optimization
+            try:
+                df.to_excel(filename, index=False, engine="openpyxl")
+                logger.info(f"✅ Excel file created successfully: {filename}")
+                logger.info(f"📊 Export Summary: {len(df)} therapists")
+                logger.info(f"🆔 NPI Records in Export: {df['NPI'].notna().sum()}")
 
-            return df
+                return df
+
+            except Exception as e:
+                logger.error(f"❌ Error during Excel file creation: {e}")
+                # Try alternative export method
+                return self._fallback_export(data_list, filename)
 
         except Exception as e:
             logger.error(f"❌ Error during Excel export: {e}")
@@ -1196,7 +1273,12 @@ class AlmaTherapistScraper:
         """
         try:
             if self.use_mongodb:
-                cursor = self.collection.find({})
+                # Use projection to avoid large documents
+                projection = {
+                    "npi_data.raw_npi_response": 0,  # Exclude the largest field
+                    "_id": 0,
+                }
+                cursor = self.collection.find({}, projection)
                 data_list = list(cursor)
             else:
                 data_list = self.local_data
@@ -1262,6 +1344,9 @@ def main():
         # Scrape data
         logger.info("🌐 Beginning data scraping process...")
         scraper.scrape_and_store(max_pages=max_pages, limit=limit)
+
+        # Debug data status before export
+        scraper.debug_data_status()
 
         # Export to Excel
         logger.info("💾 Beginning Excel export process...")
