@@ -4,6 +4,7 @@ npm-debug.log*
 yarn-error.log*
 .env
 
+*.xlsx
 # Python
 __pycache__/
 *.pyc
