@@ -175,6 +175,7 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
             }
 
             const modalSelectors = [
+                '._modal_lvcqq_73 ul li a',
                 '._modal_1ved0_69 ul li a',
                 '[role="dialog"] ul li a',
                 '.modal ul li a',

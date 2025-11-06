@@ -179,6 +179,7 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
             }
 
             const modalSelectors = [
+                '._modal_lvcqq_73 ul li a', // fix this
                 '._modal_1ved0_69 ul li a',
                 '[role="dialog"] ul li a',
                 '.modal ul li a',
@@ -324,6 +325,28 @@ async function scrapeProviderData(provider, browserContext, srNo) {
                 }
             };
 
+            const getInsuranceProvidersInternal = () => {
+                try {
+                    // More specific selector for the section
+                    const sectionHeader = document.querySelector('h3.typography_heading4__fArlk');
+                    if (!sectionHeader) return [];
+                    
+                    // Navigate to the correct container
+                    const container = sectionHeader.closest('._marginBtm1_lvcqq_2');
+                    if (!container) return [];
+                    
+                    // Get only the provider items (exclude the "see more" button)
+                    const items = Array.from(container.querySelectorAll('ul li:not(._seeMore_lvcqq_61)'))
+                        .map(li => li.textContent.trim())
+                        .filter(text => text && text.length > 0 && !text.includes('more'));
+                    
+                    return items;
+                } catch (e) {
+                    console.error('Error extracting providers:', e);
+                    return [];
+                }
+            };
+
             const getSectionContent = (sectionTitle) => {
                 try {
                     const headers = Array.from(document.querySelectorAll('h2, h3, h4, h5, h6'));
@@ -367,7 +390,11 @@ async function scrapeProviderData(provider, browserContext, srNo) {
             const license = getText('[class*="license"]');
             const education = getSectionContent("Education");
             const languages = getListItems("Languages").join(', ');
-            const insuranceProviders = getListItems("Insurance").join(', ');
+            // const insuranceProviders = getListItems("Insurance").join(', ');
+            // const insuranceProviders = getListItems("Accepted Insurance Providers").join(', ');
+
+            const insuranceProviders =  getInsuranceProvidersInternal().join(', ');
+
             const badges = getBadges();
             const location = getText('[class*="location"], [class*="address"]');
 
