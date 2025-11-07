@@ -403,16 +403,18 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
 
             // let modalContentFound = false;
             let modalHandle = null;
-            for (const selector of modalSelectors) {
-                try {
-                    // await page.waitForSelector(selector, { timeout: 3000 });
-                    modalHandle = await page.waitForSelector(selector, { timeout: 3000 });
-                    // modalContentFound = true;
-                    break;
-                } catch (e) {
-                    continue;
-                }
-            }
+            // for (const selector of modalSelectors) {
+            //     try {
+            //         // await page.waitForSelector(selector, { timeout: 3000 });
+            //         modalHandle = await page.waitForSelector(selector, { timeout: 3000 });
+            //         // modalContentFound = true;
+            //         break;
+            //     } catch (e) {
+            //         continue;
+            //     }
+            // }
+
+            modalHandle = await page.waitForSelector('div._modal_lvcqq_73', { timeout: 2000 });
 
             if (!modalHandle) {
                 throw new Error(`Modal content not found for ${modalName}`);
