@@ -82,6 +82,24 @@ services:
     deploy:
       replicas: 0
 
+  rula_main_scraper:
+    build: ./rula_scraper
+    container_name: rula_main_scraper
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    environment:
+      MONGO_HOST: mongodb
+      MONGO_PORT: 27017
+      MONGO_DB: rula_scraper_final
+      MONGO_USER: scraper
+      MONGO_PASSWORD: scraper
+      HEADLESS: true
+      SCRAPE_MODE: basic
+    volumes:
+      - ./rula_scraper:/app
+    command: node scrape.js
+
   rula_basic_scraper:
     build: ./rula_scraper
     container_name: rula_basic_scraper
