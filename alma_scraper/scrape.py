@@ -886,20 +886,20 @@ class AlmaTherapistScraper:
         logger.info(f"🔧 Processing provider: {provider_id}")
 
         # Perform NPI lookup
-        npi_data = None
-        try:
-            logger.info(
-                f"🔍 Starting NPI lookup for {provider_data.get('first_name')} {provider_data.get('last_name')}"
-            )
-            npi_data = self.find_npi(provider_data)
-            if npi_data:
-                logger.info(f"✅ NPI found: {npi_data.get('npi_number')}")
-            else:
-                logger.warning(
-                    f"⚠️  No NPI data found for {provider_data.get('first_name')} {provider_data.get('last_name')}"
-                )
-        except Exception as e:
-            logger.error(f"❌ NPI lookup failed: {e}")
+        # npi_data = None
+        # try:
+            # logger.info(
+            #     f"🔍 Starting NPI lookup for {provider_data.get('first_name')} {provider_data.get('last_name')}"
+            # )
+            # npi_data = self.find_npi(provider_data)
+            # if npi_data:
+            #     logger.info(f"✅ NPI found: {npi_data.get('npi_number')}")
+            # else:
+            #     logger.warning(
+            #         f"⚠️  No NPI data found for {provider_data.get('first_name')} {provider_data.get('last_name')}"
+            #     )
+        # except Exception as e:
+        #     logger.error(f"❌ NPI lookup failed: {e}")
 
         # Basic info
         profile_url = (
@@ -1167,7 +1167,7 @@ class AlmaTherapistScraper:
                 logger.info(f"➡️ Moving to next page: {next_url}")
                 
                 # Add delay between pages
-                delay = 2
+                delay = 1
                 logger.info(f"⏳ Waiting {delay} seconds before next page...")
                 time.sleep(delay)
             else:
