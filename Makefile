@@ -22,6 +22,9 @@ run-rula-basic-scraper:
 run-rula-detail-scraper:
 	docker compose run --rm rula_scraper node scrape_detail.js
 
+run-rula-scraper:
+	docker compose run --rm rula_scraper node scraper.js
+
 run-rula-exporter:
 	docker compose run --rm rula_scraper node export_to_excel.js
 
