@@ -431,13 +431,13 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
                 'button:has(svg)'
             ];
 
-            for (const selector of closeSelectors) {
-                const closed = await safeClick(page, selector, `close ${modalName} modal`, 2000);
-                if (closed) {
-                    await delay(200);
-                    break;
-                }
-            }
+            // for (const selector of closeSelectors) {
+            //     const closed = await safeClick(page, selector, `close ${modalName} modal`, 2000);
+            //     if (closed) {
+            //         await delay(200);
+            //         break;
+            //     }
+            // }
 
             try {
                 await page.keyboard.press('Escape');
