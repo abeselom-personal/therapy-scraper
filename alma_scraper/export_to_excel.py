@@ -20,8 +20,9 @@ def get_mongo_client():
 def export_alma_to_excel():
     """Export Alma therapist data to Excel."""
     client = get_mongo_client()
+    print('db connected')
     db = client[os.getenv("MONGO_DB", "alma_scraper_final")]
-
+    
     therapists = list(db.therapists.find())
     if not therapists:
         print("No therapists found in database")
