@@ -24,10 +24,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies and Playwright browsers
-RUN npm ci --only=production \
-    && npx playwright install firefox \
-    && npx playwright install chromium
+# RUN npm ci --only=production \
+#     && npx playwright install firefox \
+#     && npx playwright install chromium
 
+RUN npm ci  \
+&& npx playwright install firefox \
+&& npx playwright install chromium
 # Copy source code
 COPY . .
 
@@ -45,4 +48,4 @@ USER scraper
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD node -e "require('fs').access('/app/package.json', (err) => process.exit(err ? 1 : 0))"
 
-CMD ["node", "scrape_detail.js"]
+CMD ["node", "scraper.js"]
