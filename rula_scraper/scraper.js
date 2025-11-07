@@ -414,7 +414,7 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
             //     }
             // }
 
-            modalHandle = await page.waitForSelector('div._modal_lvcqq_73', { timeout: 2000 });
+            modalHandle = await page.waitForSelector('div._modal_lvcqq_73', { timeout: 3000 });
 
             if (!modalHandle) {
                 throw new Error(`Modal content not found for ${modalName}`);
