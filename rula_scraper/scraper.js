@@ -387,29 +387,38 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
             if (!clicked) return [];
 
             const modalSelectors = [
-                '._modal_1ved0_69 ul li a',
-                '[role="dialog"] ul li a',
-                '.modal ul li a',
-                '[class*="modal"] ul li a',
-                'ul li a'
+                
+                // '._modal_1ved0_69 ul li a',
+                // '[role="dialog"] ul li a',
+                // '.modal ul li a',
+                // '[class*="modal"] ul li a',
+                // 'ul li a'
+                '._modal_1ved0_69',
+                '._modal_lvcqq_73',
+                'div[class*="_modal_"]',
+                '[role="dialog"]',
+                '.modal',
+                '[class*="modal"]'
             ];
 
-            let modalContentFound = false;
+            // let modalContentFound = false;
+            let modalHandle = null;
             for (const selector of modalSelectors) {
                 try {
-                    await page.waitForSelector(selector, { timeout: 3000 });
-                    modalContentFound = true;
+                    // await page.waitForSelector(selector, { timeout: 3000 });
+                    modalHandle = await page.waitForSelector(selector, { timeout: 3000 });
+                    // modalContentFound = true;
                     break;
                 } catch (e) {
                     continue;
                 }
             }
 
-            if (!modalContentFound) {
+            if (!modalHandle) {
                 throw new Error(`Modal content not found for ${modalName}`);
             }
 
-            const data = await page.$$eval('ul li a', els =>
+            const data = await modalHandle.$$eval('ul li a', els =>
                 els.map(a => a.textContent.trim()).filter(text => text.length > 0)
             );
 
@@ -469,6 +478,8 @@ async function getInsuranceProviders(page, providerName) {
         providerName
     );
 }
+
+
 
 async function scrapeProviderData(provider, browserContext, srNo) {
     const page = await browserContext.newPage();
@@ -572,13 +583,17 @@ async function scrapeProviderData(provider, browserContext, srNo) {
             const fullBio = [bio, approach, focus].filter(Boolean).join(' ');
 
             const focusAreas = getListItems("Focus Areas") || getListItems("Specialties");
-            const license = getText('[class*="license"]');
+            // const license = getText('[class*="license"]');
+            const license = getSectionContent('License')
             const education = getSectionContent("Education");
-            const languages = getListItems("Languages").join(', ');
-            const insuranceProviders = getListItems("Insurance").join(', ');
+            const languages = getSectionContent("Languages Spoken")
+            // const insuranceProviders = getListItems("Insurance").join(', ');
+            const insuranceProviders = getListItems("Accepted Insurance Providers").join(', ');
             const badges = getBadges();
             const location = getText('[class*="location"], [class*="address"]');
 
+
+         
             return {
                 name,
                 profession,
@@ -599,7 +614,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
             getInsuranceProviders(page, provider.name)
         ];
 
-        const [bookingSummary, treatmentApproaches, mainSpecialties, insuranceProviders] = await Promise.allSettled(
+        const [bookingSummary, treatmentApproaches, mainSpecialties, modalInsuranceProviders] = await Promise.allSettled(
             extractionPromises.map(p =>
                 Promise.race([
                     p,
@@ -613,8 +628,8 @@ async function scrapeProviderData(provider, browserContext, srNo) {
         );
 
         // NPI Lookup
-        const npiNumber = await fetchNPI(providerData.name || provider.name, provider.state);
-
+        // const npiNumber = await fetchNPI(providerData.name || provider.name, provider.state);
+        const allProviders = [...new Set([...providerData.insuranceProviders, ...modalInsuranceProviders])];
         const result = {
             'Url': provider.profile_url,
             'Name': providerData.name || provider.name,
@@ -652,21 +667,23 @@ async function scrapeProviderData(provider, browserContext, srNo) {
             'Connect Link - Twitter': '',
             'Connect Link - Website': '',
             'Main Specialties': mainSpecialties.join(','),
-            'Accepted IPs': insuranceProviders.join(','),
+            'Accepted IPs': allProviders.join(','),
             'Appointments in 7 Days': 0,
-            'NPI Number': npiNumber,
+            'NPI Number': '',
+            // 'NPI Number': npiNumber,
             'Sr. NO': srNo
         };
 
         success = true;
-        logMessage(`Successfully scraped: ${provider.name} - NPI: ${npiNumber || 'Not found'}`);
+        // logMessage(`Successfully scraped: ${provider.name} - NPI: ${npiNumber || 'Not found'}`);
+        logMessage(`Successfully scraped: ${provider.name}`);
         return result;
 
     } catch (error) {
         logError(provider.name, error, 'scraping process');
 
-        // Attempt NPI lookup even on failure
-        const npiNumber = await fetchNPI(provider.name, provider.state);
+        // // Attempt NPI lookup even on failure
+        // const npiNumber = await fetchNPI(provider.name, provider.state);
 
         return {
             'Url': provider.profile_url,
@@ -677,7 +694,8 @@ async function scrapeProviderData(provider, browserContext, srNo) {
             'Listed In States': provider.state,
             'States': provider.state,
             'Listed In Websites': 'rula',
-            'NPI Number': npiNumber,
+            'NPI Number': '',
+            // 'NPI Number': npiNumber,
             'Sr. NO': srNo,
             'Error': error.message
         };
@@ -732,33 +750,33 @@ async function workerProcess() {
             } catch (error) {
                 logError(provider.name, error, 'worker process');
 
-                const npiNumber = await fetchNPI(provider.name, provider.state);
+                // const npiNumber = await fetchNPI(provider.name, provider.state);
 
-                const failedResult = {
-                    'Url': provider.profile_url,
-                    'Name': provider.name,
-                    'Profession': '',
-                    'Bio': '',
-                    'Locations': provider.city,
-                    'Listed In States': provider.state,
-                    'States': provider.state,
-                    'Listed In Websites': 'rula',
-                    'NPI Number': npiNumber,
-                    'Sr. NO': srNo,
-                    'Error': error.message
-                };
-                results.push(failedResult);
+                // const failedResult = {
+                //     'Url': provider.profile_url,
+                //     'Name': provider.name,
+                //     'Profession': '',
+                //     'Bio': '',
+                //     'Locations': provider.city,
+                //     'Listed In States': provider.state,
+                //     'States': provider.state,
+                //     'Listed In Websites': 'rula',
+                //     'NPI Number': npiNumber,
+                //     'Sr. NO': srNo,
+                //     'Error': error.message
+                // };
+                // results.push(failedResult);
 
-                parentPort.postMessage({
-                    type: 'progress',
-                    workerId,
-                    provider: provider.name,
-                    success: false,
-                    error: error.message
-                });
+                // parentPort.postMessage({
+                //     type: 'progress',
+                //     workerId,
+                //     provider: provider.name,
+                //     success: false,
+                //     error: error.message
+                // });
             }
 
-            await delay(500);
+            await delay(200);
         }
     } catch (error) {
         logMessage(`Worker ${workerId} fatal error: ${error.message}`, 'ERROR');
@@ -857,7 +875,7 @@ async function scrapeProfilesParallel(providers) {
 async function createExcelFile(data) {
     try {
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet('Rula Providers Data');
+        const worksheet = workbook.addWorksheet('Rulla Providers Data');
 
         const headers = [
             'Url', 'Name', 'Profession', 'Clinic Name', 'Bio', 'Additional Focus Areas',
@@ -887,8 +905,8 @@ async function createExcelFile(data) {
             col.width = Math.min(maxLength, 50);
         });
 
-        await workbook.xlsx.writeFile('rula_providers_data.xlsx');
-        logMessage('Excel file saved as rula_providers_data.xlsx', 'SUCCESS');
+        await workbook.xlsx.writeFile('rula_v2_providers_data.xlsx');
+        logMessage('Excel file saved as rula_v2_providers_data.xlsx', 'SUCCESS');
     } catch (error) {
         logMessage(`Failed to create Excel file: ${error.message}`, 'ERROR');
         throw error;
@@ -909,7 +927,7 @@ async function main() {
         logMessage('Starting complete scraping process...');
 
         // Step 1: Scrape states in parallel
-        await scrapeStatesParallel();
+        // await scrapeStatesParallel();
 
         // Step 2: Collect all providers
         const allProviders = await collectAllProviders();
@@ -932,10 +950,11 @@ async function main() {
 
         const successCount = results.filter(r => !r.Error).length;
         const failCount = results.filter(r => r.Error).length;
-        const npiCount = results.filter(r => r['NPI Number']).length;
+        // const npiCount = results.filter(r => r['NPI Number']).length;
 
         logMessage(`Process completed in ${duration} minutes. Success: ${successCount}, Failed: ${failCount}, NPI Found: ${npiCount}`, 'SUCCESS');
 
+        logMessage(`Process completed in ${duration} minutes. Success: ${successCount}, Failed: ${failCount},`, 'SUCCESS');
     } catch (error) {
         logMessage(`Fatal error in main process: ${error.message}`, 'FATAL');
         process.exit(1);
