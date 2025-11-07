@@ -33,10 +33,10 @@ class AlmaTherapistScraper:
 
     def __init__(
         self,
-        mongo_uri: str = None,
-        db_name: str = None,
-        username: str = None,
-        password: str = None,
+        mongo_uri: Optional[str] = None,
+        db_name: Optional[str] = None,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
         use_mongodb: bool = True,
     ):
         """
@@ -541,7 +541,7 @@ class AlmaTherapistScraper:
             return False
 
     def fetch_provider_list(
-        self, url: str = None, page: int = 1, limit: int = 15
+        self, url: Optional[str] , page: int = 1, limit: int = 15
     ) -> Optional[Dict]:
         """Fetch the list of providers from Alma API with pagination or next URL."""
         if url:
@@ -681,7 +681,10 @@ class AlmaTherapistScraper:
         }
 
         # Extract and categorize filterables
-        filterables = provider.get("filterables", [])
+        filterables = provider.get("filterables", []) 
+        # TODO
+        #filter it by specialty_v2_lifes and add separate speciality,for modality the same...
+
         categorized_filterables = self.categorize_filterables(filterables)
 
         # Extract provider locations and neighborhoods
@@ -691,7 +694,7 @@ class AlmaTherapistScraper:
         complete_provider_data = {
             **basic_info,
             "filterables": filterables,
-            "categorized_filterables": categorized_filterables,
+            "categorized_filterables": categorized_filterables, # interseted here
             "provider_locations": provider_locations,
             "provider_neighborhoods": provider_neighborhoods,
             "distance_to_provider": provider.get("distanceToProvider"),
@@ -740,7 +743,15 @@ class AlmaTherapistScraper:
                 if "out_of_pocket" in slug or "sliding_scale" in slug:
                     categories["payment_methods"].append(name)
                 else:
-                    categories["insurance_providers"].append(name)
+                    # categories["insurance_providers"].append(name)  
+                     #        {
+                    #     "slug": "payment_nippon",
+                    #     "name": "Accepts Nippon"  # make it only Nippon
+                    # },
+                    if name.startswith("Accepts "):
+                        provider_name = name.replace("Accepts ", "").strip()
+                        categories["insurance_providers"].append(provider_name) 
+                   
             elif slug.startswith("identity_race_"):
                 categories["race_ethnicity"].append(name)
             elif slug.startswith("teletherapy_preference_"):
@@ -794,6 +805,16 @@ class AlmaTherapistScraper:
                 modalities.append(item.get("name", ""))
         return ", ".join(modalities) if modalities else ""
 
+
+    # def extract_additional_focus_areas(self, filterables: List[Dict]) -> str:
+    #     """Extract additional focus areas (similar to specialties but broader)."""
+    #     focus_areas = []
+    #     for item in filterables:
+    #         if item.get("slug", "").startswith("specialty_v2_"):
+    #             focus_areas.append(item.get("name", ""))
+    #     return ", ".join(focus_areas) if focus_areas else ""
+
+
     def extract_appointment_types_detailed(
         self, filterables: List[Dict]
     ) -> str:
@@ -812,34 +833,34 @@ class AlmaTherapistScraper:
                 age_groups.append(item.get("name", ""))
         return ", ".join(age_groups) if age_groups else ""
 
-    def extract_highlights(
-        self, provider_data: Dict, filterables: List[Dict]
-    ) -> str:
-        """Extract highlights for the provider."""
-        highlights = []
+    # def extract_highlights(
+    #     self, provider_data: Dict, filterables: List[Dict]
+    # ) -> str:
+    #     """Extract highlights for the provider."""
+    #     highlights = []
 
-        # Add states
-        licensure_states = provider_data.get("licensure_states", [])
-        if licensure_states:
-            highlights.append(", ".join(licensure_states))
+    #     # Add states
+    #     licensure_states = provider_data.get("licensure_states", [])
+    #     if licensure_states:
+    #         highlights.append(", ".join(licensure_states))
 
-        # Add verification status
-        highlights.append("Verified by Alma")
+    #     # Add verification status
+    #     highlights.append("Verified by Alma")
 
-        # Add service types
-        services = []
-        for item in filterables:
-            if item.get("slug", "").startswith("service_"):
-                services.append(item.get("name", ""))
-        if services:
-            highlights.append(", ".join(services))
+    #     # Add service types
+    #     services = []
+    #     for item in filterables:
+    #         if item.get("slug", "").startswith("service_"):
+    #             services.append(item.get("name", ""))
+    #     if services:
+    #         highlights.append(", ".join(services))
 
-        # Add insurance status
-        accepted_insurance = provider_data.get("accepted_insurance_slugs", [])
-        if accepted_insurance:
-            highlights.append("Accepts your insurance")
+    #     # Add insurance status
+    #     accepted_insurance = provider_data.get("accepted_insurance_slugs", [])
+    #     if accepted_insurance:
+    #         highlights.append("Accepts your insurance")
 
-        return ", ".join(highlights)
+    #     return ", ".join(highlights)
 
     def parse_rate_range(self, rate_value: str) -> tuple:
         """Parse min and max session price from rate value string."""
@@ -882,7 +903,7 @@ class AlmaTherapistScraper:
 
         # Basic info
         profile_url = (
-            f"https://helloalma.com/providers/{provider_slug}/"
+            f"https://secure.helloalma.com/providers/{provider_slug}/"
             if provider_slug
             else ""
         )
@@ -895,47 +916,110 @@ class AlmaTherapistScraper:
         bio = provider_data.get("summary", "")
 
         # Filterables extraction
-        filterables = provider_data.get("filterables", [])
+        # filterables = provider_data.get("filterables", []) # not needed to this ..
+
+        categorized_filterables = provider_data.get("categorized_filterables",{})
+
+        
 
         # Enhanced field extraction
-        treatment_approaches = self.extract_treatment_approaches_detailed(
-            filterables
-        )
-        appointment_types = self.extract_appointment_types_detailed(filterables)
-        age_groups = self.extract_age_groups_detailed(filterables)
-        highlights = self.extract_highlights(provider_data, filterables)
-        all_specialties = self.extract_all_specialties(filterables)
+        # treatment_approaches = self.extract_treatment_approaches_detailed(
+        #     filterables
+        # )
+
+        modalities = categorized_filterables.get("modalities",[])
+        treatment_approaches =  ", ".join(modalities) if modalities else ""
+
+
+        modalities = categorized_filterables.get("modalities",[])
+        appointment_types =  ", ".join(modalities) if modalities else ""
+        
+        # appointment_types = self.extract_appointment_types_detailed(filterables)
+
+        services = categorized_filterables.get("services",[])
+        appointment_types = ", ".join(services) if services else ""
+
+
+        # age_groups = self.extract_age_groups_detailed(filterables)
+        
+        ages_served =  categorized_filterables.get("ages_served",[])
+        age_groups = ", ".join(ages_served) if ages_served else ""
+
+
+
+        # highlights = self.extract_highlights(provider_data, filterables) # POINTLESS
+        highlights = ""
+
+
+        # all_specialties = self.extract_all_specialties(filterables)
+
+        specialties =  categorized_filterables.get("specialties",[])
+        all_specialties = ", ".join(specialties) if specialties else ""
+
+
+        # additional_focus_areas = self.extract_additional_focus_areas(filterables)
+        
+        # additional_focus_areas =  categorized_filterables.get("specialties",{})
+        additional_focus_areas = ""
 
         # Languages
-        languages = self.extract_filterables_by_prefix(filterables, "language_")
+        # languages = self.extract_filterables_by_prefix(filterables, "language_")
+        
+        all_languages =  categorized_filterables.get("languages",[])
+        languages = ", ".join(all_languages) if all_languages else ""
 
         # Gender
-        gender = self.extract_filterables_by_prefix(
-            filterables, "identity_gender_"
-        )
+        # gender = self.extract_filterables_by_prefix(
+        #     filterables, "identity_gender_"
+        # )
 
+        all_gender =  categorized_filterables.get("languages",[])
+        gender = ", ".join(all_gender) if all_gender else ""
+
+        
         # Race/Ethnicity
-        race_ethnicity = self.extract_filterables_by_prefix(
-            filterables, "identity_race_"
-        )
+        # race_ethnicity = self.extract_filterables_by_prefix(
+        #     filterables, "identity_race_"
+        # )
+
+        all_race_ethnicity =  categorized_filterables.get("race_ethnicity",[])
+        race_ethnicity = ", ".join(all_race_ethnicity) if all_race_ethnicity else ""
+
+        
 
         # Licenses and states
-        licensure_states = provider_data.get("licensure_states", [])
-        licenses = ", ".join(licensure_states) if licensure_states else ""
+        all_licensure_states = provider_data.get("licensure_states", [])
+        licenses_states = ", ".join(all_licensure_states) if all_licensure_states else ""
+        
+        licensure =  categorized_filterables.get("licensure",[])
+        licenses = ", ".join(licensure) if licensure else ""
 
+        
         # Rate parsing
         rate_value = provider_data.get("rate_value", "")
+
         min_price, max_price = self.parse_rate_range(rate_value)
 
+
+        accepted_insurance_slugs = provider_data.get("accepted_insurance_slugs",[])
+
+        
+        insurances = [
+                " ".join(slug.split("_")[1:]).title()  # remove 'payment', join with spaces, capitalize words
+                for slug in accepted_insurance_slugs
+            ]
+        
         # Construct the complete data row with NPI data
         processed_data = {
             "Url": profile_url,
             "Name": full_name,
-            "NPI": npi_data.get("npi_number") if npi_data else "",
+            # "NPI": npi_data.get("npi_number") if npi_data else "",
+            "NPI": "",
             "Profession": profession,
             "Clinic Name": "",
             "Bio": bio,
-            "Additional Focus Areas": "",
+            
+            "Additional Focus Areas": additional_focus_areas,
             "Treatment Approaches": treatment_approaches,
             "Appointment Types": appointment_types,
             "Communities": "",
@@ -945,7 +1029,8 @@ class AlmaTherapistScraper:
             "Gender": gender,
             "Pronouns": "",
             "Race Ethnicity": race_ethnicity,
-            "Licenses": f"Licensed {profession.split(', ')[-1] if ',' in profession else profession}",
+            # "Licenses": f"Licensed {profession.split(', ')[-1] if ',' in profession else profession}",
+            "Licenses": licenses,
             "Locations": "Video session: Online",
             "Education": "",
             "Faiths": "",
@@ -957,9 +1042,10 @@ class AlmaTherapistScraper:
             "Booking Summary": "",
             "Booking Url": profile_url,
             "Listed In States": (
-                ", ".join(licensure_states) if licensure_states else ""
+                ", ".join(licenses_states) if licenses_states else ""
             ),
-            "States": ", ".join(licensure_states) if licensure_states else "",
+            "States": ", ".join(licenses_states) if licenses_states else "",
+            # "Listed In Websites": "Hello Alma",
             "Listed In Websites": "Hello Alma",
             "Urls": profile_url,
             "Connect Link - Facebook": "",
@@ -968,26 +1054,30 @@ class AlmaTherapistScraper:
             "Connect Link - Twitter": "",
             "Connect Link - Website": "",
             "Main Specialties": all_specialties,
-            "Accepted IPs": "Various",
+            "Accepted IPs": ', '.join(insurances) if insurances else "",
             "Sr. NO": provider_id,
             "provider_id": provider_id,
             "source": provider_data.get("source", "unknown"),
             # Store comprehensive data
             "raw_data": provider_data,
-            "npi_data": npi_data,  # Store full NPI data
+            # "npi_data": npi_data, 
+            "npi_data":"",
             "scraped_at": datetime.now(),
             "processed_at": datetime.now().isoformat(),
-        }
 
+
+        }
+        sample = processed_data.get("Accepted IPs",'')
+        # print(f"\n\n Accepted IPs {sample}\n\n")
         logger.info(
-            f"✅ Successfully processed: {full_name} (ID: {provider_id})"
+            f"✅ Successfully processed: {full_name} (ID: {provider_id}) , Accepted IPs (len){len(sample)}"
         )
-        if npi_data:
-            logger.info(f"   🆔 NPI: {npi_data.get('npi_number')}")
+        # if npi_data:
+        #     logger.info(f"   🆔 NPI: {npi_data.get('npi_number')}")
 
         return processed_data
 
-    def scrape_and_store(self, max_pages: int = None, limit: int = 15) -> List[Dict]:
+    def scrape_and_store(self, max_pages: int, limit: int = 15) -> List[Dict]:
         """Main method to scrape data by following next links until null."""
         all_processed_data = []
         total_providers_processed = 0
@@ -1016,7 +1106,7 @@ class AlmaTherapistScraper:
             if current_url:
                 provider_data = self.fetch_provider_list(url=current_url)
             else:
-                provider_data = self.fetch_provider_list(page=1, limit=limit)
+                provider_data = self.fetch_provider_list(url=None,page=1, limit=limit)
 
             # FIX: Proper error handling
             if not provider_data:
@@ -1052,16 +1142,15 @@ class AlmaTherapistScraper:
                         page_successful_storages += 1
                         successful_storages += 1
 
-                    if processed_data.get("NPI"):
-                        page_npi_found += 1
-                        npi_found_count += 1
+                    # if processed_data.get("NPI"):
+                    #     page_npi_found += 1
+                    #     npi_found_count += 1
 
                     all_processed_data.append(processed_data)
                     page_processed_count += 1
                     total_providers_processed += 1
 
-                    # Add delay between NPI lookups to be respectful to the API
-                    time.sleep(1)
+                
 
                 except Exception as e:
                     logger.error(f"❌ Error processing provider: {e}")
@@ -1328,7 +1417,7 @@ def main():
     logger.info("🎬 Starting Alma Therapist Data Scraper")
 
     # Get configuration from environment
-    max_pages = int(os.getenv("SCRAPE_MAX_PAGES", "0")) or None  # 0 means no limit
+    max_pages = int(os.getenv("SCRAPE_MAX_PAGES", "0"))  # 0 means no limit
     limit = int(os.getenv("SCRAPE_PAGE_LIMIT", "15"))
 
     # Initialize the scraper
