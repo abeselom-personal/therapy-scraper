@@ -414,7 +414,11 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
             //     }
             // }
 
-            modalHandle = await page.waitForSelector('div._modal_lvcqq_73', { timeout: 3000 });
+            modalHandle = await page.waitForSelector('div._modal_1ved0_69', { timeout: 3000 });
+
+            // const modalTrigger = '[data-testid="Accepted Insurance Providers-modal-trigger"]';
+            // await page.waitForSelector(modalTrigger, { state: 'visible', timeout: 5000 });
+            // await page.click(modalTrigger);
 
             if (!modalHandle) {
                 throw new Error(`Modal content not found for ${modalName}`);
