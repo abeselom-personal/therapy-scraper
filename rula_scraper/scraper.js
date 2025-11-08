@@ -690,7 +690,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
         // const npiNumber = await fetchNPI(providerData.name || provider.name, provider.state);
         const allProviders = [...new Set([...providerData.insuranceProviders, ...modalInsuranceProviders])];
 
-        
+
 
         const result = {
             'Url': provider.profile_url,
@@ -739,7 +739,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
         success = true;
         // logMessage(`Successfully scraped: ${provider.name} - NPI: ${npiNumber || 'Not found'}`);
         logMessage(`Successfully scraped: ${provider.name}`);
-        logMessage(`DEBUG: ${JSON.stringify(mainSpecialties.join(','), allProviders.join(","), null, 2)}`);
+        logMessage(`DEBUG: ${JSON.stringify(result, null, 2)}`);
 
         return result;
 
