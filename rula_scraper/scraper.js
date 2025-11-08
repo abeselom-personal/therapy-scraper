@@ -464,7 +464,7 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
 async function getTreatmentApproaches(page, providerName) {
     return await getModalData(
         page,
-        '[data-testid="Treatment Approaches-modal-trigger"]',
+        '[data-testid="Treatment Approaches-modal-trigger"]',        
         'Treatment Approaches',
         providerName
     );
@@ -583,6 +583,30 @@ async function scrapeProviderData(provider, browserContext, srNo) {
                 }
             };
 
+            const getInsuranceProvider = (sectionTitle) => {
+                    try {
+                        const headers = Array.from(document.querySelectorAll('h2, h3, h4, h5, h6'));
+                        const sectionHeader = headers.find(h =>
+                          h.textContent && h.textContent.includes(sectionTitle)
+                        );
+
+                        if (!sectionHeader) return [];
+
+                        const container = sectionHeader.closest('div, section, article');
+                        if (!container) return [];
+
+                        const items = Array.from(container.querySelectorAll('ul li'))
+                        .map(li => li.textContent.trim())
+                        // remove empty and “+ more” type entries
+                        .filter(text => text.length > 0 && !text.match(/^\+\s*\d+\s*more/i));
+
+                        return items;
+                    } catch (e) {
+                        console.error('Error in getInsuranceProvider:', e);
+                        return [];
+                    }
+                };
+
             const name = getText('h1');
             const profession = getText('[class*="license"], [class*="License"], [class*="profession"]');
             const bio = getSectionContent("Hi there, I'm") || getSectionContent("About") || getText('[class*="bio"]');
@@ -591,13 +615,13 @@ async function scrapeProviderData(provider, browserContext, srNo) {
 
             const fullBio = [bio, approach, focus].filter(Boolean).join(' ');
 
-            const focusAreas = getListItems("Focus Areas") || getListItems("Specialties");
+            // const focusAreas = getListItems("Focus Areas") || getListItems("Specialties");
             // const license = getText('[class*="license"]');
             const license = getSectionContent('License')
             const education = getSectionContent("Education");
             const languages = getSectionContent("Languages Spoken")
             // const insuranceProviders = getListItems("Insurance").join(', ');
-            const insuranceProviders = getListItems("Accepted Insurance Providers").join(', ');
+            const insuranceProviders = getInsuranceProvider("Accepted Insurance Providers")
             const badges = getBadges();
             const location = getText('[class*="location"], [class*="address"]');
 
@@ -639,6 +663,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
         // NPI Lookup
         // const npiNumber = await fetchNPI(providerData.name || provider.name, provider.state);
         const allProviders = [...new Set([...providerData.insuranceProviders, ...modalInsuranceProviders])];
+
         const result = {
             'Url': provider.profile_url,
             'Name': providerData.name || provider.name,
