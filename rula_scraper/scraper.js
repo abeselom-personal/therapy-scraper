@@ -607,6 +607,34 @@ async function scrapeProviderData(provider, browserContext, srNo) {
                         return [];
                     }
                 };
+            const getTherapyTypes = (sectionTitle) => {
+                    try {
+                        // find all headers
+                        const headers = Array.from(document.querySelectorAll('h2, h3, h4, h5, h6'));
+
+                        // find the header that matches the section title
+                        const sectionHeader = headers.find(h =>
+                            h.textContent && h.textContent.includes(sectionTitle)
+                        );
+                        if (!sectionHeader) return [];
+
+                        // get the closest container div/section/article
+                        const container = sectionHeader.closest('div, section, article');
+                        if (!container) return [];
+
+                        // get all <li> under <ul> and clean text
+                        const items = Array.from(container.querySelectorAll('ul li'))
+                            .map(li => li.textContent.trim())
+                            // remove empty or "+ N more" entries
+                            .filter(text => text.length > 0 && !/^\+\s*\d+\s*more/i.test(text));
+
+                        return items;
+                    } catch (e) {
+                        console.error('Error in getTherapyTypes:', e);
+                        return [];
+                    }
+                };
+
 
             const name = getText('h1');
             const profession = getText('[class*="license"], [class*="License"], [class*="profession"]');
@@ -623,6 +651,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
             const languages = getSectionContent("Languages Spoken")
             // const insuranceProviders = getListItems("Insurance").join(', ');
             const insuranceProviders = getInsuranceProvider("Accepted Insurance Providers")
+            const therapyTypes = getTherapyTypes("Therapy Types")
             const badges = getBadges();
             const location = getText('[class*="location"], [class*="address"]');
 
@@ -636,6 +665,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
                 education,
                 languages,
                 insuranceProviders,
+                therapyTypes,
                 badges: badges.join(', '),
                 location
             };
@@ -689,7 +719,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
         // NPI Lookup
         // const npiNumber = await fetchNPI(providerData.name || provider.name, provider.state);
         const allProviders = [...new Set([...providerData.insuranceProviders, ...modalInsuranceProviders])];
-        const allSpecialities = [... new Set([...treatmentApproaches, ...mainSpecialties])]
+        const allSpecialities = [... new Set([ ...providerData.therapyTypes, ...treatmentApproaches, ...mainSpecialties])]
 
 
         const result = {
@@ -739,7 +769,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
         success = true;
         // logMessage(`Successfully scraped: ${provider.name} - NPI: ${npiNumber || 'Not found'}`);
         logMessage(`Successfully scraped: ${provider.name}`);
-        // logMessage(`DEBUG: ${JSON.stringify(result, null, 2)}`);
+        logMessage(`DEBUG: ${JSON.stringify(result, null, 2)}`);
 
         return result;
 
