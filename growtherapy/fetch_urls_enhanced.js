@@ -269,7 +269,7 @@ const fetchProvidersWithPagination = async (state, context) => {
                     'Sr. NO': allProviders.length + 1,
                     'NPI': ''
                 };
-                console.log(`DEBUG DATA:`,formattedProvider)
+                // console.log(`DEBUG DATA:`,formattedProvider)
                 allProviders.push(formattedProvider);
                 totalProvidersFetched++;
 
