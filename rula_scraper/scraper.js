@@ -430,6 +430,7 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
                 els.map(a => a.textContent.trim()).filter(text => text.length > 0)
             );
 
+
             // const closeSelectors = [
             //     'button[aria-label="Close"]',
             //     'button[aria-label="close"]',
@@ -684,7 +685,8 @@ async function scrapeProviderData(provider, browserContext, srNo) {
 
         success = true;
         // logMessage(`Successfully scraped: ${provider.name} - NPI: ${npiNumber || 'Not found'}`);
-        logMessage(`Successfully scraped: ${provider.name}`);
+        logMessage(`Successfully scraped: ${provider.name} - main_specialities - ${JSON.stringify(mainSpecialties.join(","))} - insurances: ${allproviders.join(",")}`);
+
         return result;
 
     } catch (error) {
