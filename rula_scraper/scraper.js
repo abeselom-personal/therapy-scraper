@@ -315,18 +315,7 @@ async function collectAllProviders() {
     }
 }
 
-// Step 3: Profile Scraping Functions
-async function safeClick(page, selector, context = '', timeout = CONFIG.selectorTimeout) {
-    try {
-        await page.waitForSelector(selector, { timeout, state: 'visible' });
-        await page.click(selector);
-        await delay(300);
-        return true;
-    } catch (error) {
-        logMessage(`Could not click selector ${selector} ${context ? `[${context}]` : ''}: ${error.message}`, 'WARN');
-        return false;
-    }
-}
+
 
 async function extractBookingSummary(page, providerName) {
     return await retryOperation(async () => {
@@ -380,26 +369,39 @@ async function extractBookingSummary(page, providerName) {
     }, `booking summary extraction for ${providerName}`);
 }
 
+// Step 3: Profile Scraping Functions
+async function safeClick(page, selector, context = '', timeout = CONFIG.selectorTimeout) {
+    try {
+        await page.waitForSelector(selector, { timeout, state: 'visible' });
+        await page.click(selector);
+        await delay(300);
+        return true;
+    } catch (error) {
+        logMessage(`Could not click selector ${selector} ${context ? `[${context}]` : ''}: ${error.message}`, 'WARN');
+        return false;
+    }
+}
+
 async function getModalData(page, modalTrigger, modalName, providerName) {
     return await retryOperation(async () => {
         try {
             const clicked = await safeClick(page, modalTrigger, `${modalName} modal trigger`, 10000);
             if (!clicked) return [];
 
-            const modalSelectors = [
+            // const modalSelectors = [
                 
-                // '._modal_1ved0_69 ul li a',
-                // '[role="dialog"] ul li a',
-                // '.modal ul li a',
-                // '[class*="modal"] ul li a',
-                // 'ul li a'
-                '._modal_1ved0_69',
-                '._modal_lvcqq_73',
-                'div[class*="_modal_"]',
-                '[role="dialog"]',
-                '.modal',
-                '[class*="modal"]'
-            ];
+            //     '._modal_1ved0_69 ul li a',
+            //     '[role="dialog"] ul li a',
+            //     '.modal ul li a',
+            //     '[class*="modal"] ul li a',
+            //     'ul li a',
+            //     '._modal_1ved0_69',
+            //     '._modal_lvcqq_73',
+            //     'div[class*="_modal_"]',
+            //     '[role="dialog"]',
+            //     '.modal',
+            //     '[class*="modal"]'
+            // ];
 
             // let modalContentFound = false;
             let modalHandle = null;
@@ -413,8 +415,8 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
             //         continue;
             //     }
             // }
-
-            modalHandle = await page.waitForSelector('div._modal_1ved0_69', { timeout: 3000 });
+            await page.waitForTimeout(500);
+            modalHandle = await page.waitForSelector('div._modal_lvcqq_73', { timeout: 5000  });
 
             // const modalTrigger = '[data-testid="Accepted Insurance Providers-modal-trigger"]';
             // await page.waitForSelector(modalTrigger, { state: 'visible', timeout: 5000 });
@@ -428,14 +430,14 @@ async function getModalData(page, modalTrigger, modalName, providerName) {
                 els.map(a => a.textContent.trim()).filter(text => text.length > 0)
             );
 
-            const closeSelectors = [
-                'button[aria-label="Close"]',
-                'button[aria-label="close"]',
-                '[data-testid*="close"]',
-                'button[class*="close"]',
-                '.modal-close',
-                'button:has(svg)'
-            ];
+            // const closeSelectors = [
+            //     'button[aria-label="Close"]',
+            //     'button[aria-label="close"]',
+            //     '[data-testid*="close"]',
+            //     'button[class*="close"]',
+            //     '.modal-close',
+            //     'button:has(svg)'
+            // ];
 
             // for (const selector of closeSelectors) {
             //     const closed = await safeClick(page, selector, `close ${modalName} modal`, 2000);
