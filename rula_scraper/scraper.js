@@ -739,7 +739,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
         success = true;
         // logMessage(`Successfully scraped: ${provider.name} - NPI: ${npiNumber || 'Not found'}`);
         logMessage(`Successfully scraped: ${provider.name}`);
-        logMessage(`DEBUG: ${JSON.stringify(result, null, 2)}`);
+        // logMessage(`DEBUG: ${JSON.stringify(result, null, 2)}`);
 
         return result;
 
