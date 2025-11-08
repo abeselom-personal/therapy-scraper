@@ -470,6 +470,7 @@ async function getTreatmentApproaches(page, providerName) {
     );
 }
 
+
 async function getMainSpecialties(page, providerName) {
     return await getModalData(
         page,
@@ -640,29 +641,56 @@ async function scrapeProviderData(provider, browserContext, srNo) {
             };
         });
 
-        const extractionPromises = [
-            extractBookingSummary(page, provider.name),
-            getTreatmentApproaches(page, provider.name),
-            getMainSpecialties(page, provider.name),
-            getInsuranceProviders(page, provider.name)
-        ];
+        // const extractionPromises = [
+        //     extractBookingSummary(page, provider.name),
+        //     getTreatmentApproaches(page, provider.name),
+        //     getMainSpecialties(page, provider.name),
+        //     getInsuranceProviders(page, provider.name)
+        // ];
 
-        const [bookingSummary, treatmentApproaches, mainSpecialties, modalInsuranceProviders] = await Promise.allSettled(
-            extractionPromises.map(p =>
-                Promise.race([
-                    p,
-                    new Promise((_, reject) =>
-                        setTimeout(() => reject(new Error('Extraction timeout')), 15000)
-                    )
-                ])
-            )
-        ).then(results =>
-            results.map(result => result.status === 'fulfilled' ? result.value : [])
-        );
+        // const [bookingSummary, treatmentApproaches, mainSpecialties, modalInsuranceProviders] = await Promise.allSettled(
+        //     extractionPromises.map(p =>
+        //         Promise.race([
+        //             p,
+        //             new Promise((_, reject) =>
+        //                 setTimeout(() => reject(new Error('Extraction timeout')), 15000)
+        //             )
+        //         ])
+        //     )
+        // ).then(results =>
+        //     results.map(result => result.status === 'fulfilled' ? result.value : [])
+        // );
+
+
+        const withTimeout = async (promise, ms = 15000) => {
+            return Promise.race([
+                promise,
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Extraction timeout')), ms)
+                )
+            ]).catch(e => {
+                console.warn(e.message);
+                return []; // fallback to empty array on error
+            });
+        };
+
+        // Sequential extraction to avoid modal race conditions
+        const bookingSummary = await withTimeout(extractBookingSummary(page, provider.name));
+        await delay(500);
+
+        const treatmentApproaches = await withTimeout(getTreatmentApproaches(page, provider.name));
+        await delay(500);
+
+        const mainSpecialties = await withTimeout(getMainSpecialties(page, provider.name));
+        await delay(500);
+
+        const modalInsuranceProviders = await withTimeout(getInsuranceProviders(page, provider.name));
 
         // NPI Lookup
         // const npiNumber = await fetchNPI(providerData.name || provider.name, provider.state);
         const allProviders = [...new Set([...providerData.insuranceProviders, ...modalInsuranceProviders])];
+
+        
 
         const result = {
             'Url': provider.profile_url,
@@ -711,7 +739,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
         success = true;
         // logMessage(`Successfully scraped: ${provider.name} - NPI: ${npiNumber || 'Not found'}`);
         logMessage(`Successfully scraped: ${provider.name}`);
-        logMessage(`DEBUG: ${JSON.stringify(result, null, 2)}`);
+        logMessage(`DEBUG: ${JSON.stringify(mainSpecialties.join(','), allProviders.join(","), null, 2)}`);
 
         return result;
 
