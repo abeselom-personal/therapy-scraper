@@ -689,7 +689,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
         // NPI Lookup
         // const npiNumber = await fetchNPI(providerData.name || provider.name, provider.state);
         const allProviders = [...new Set([...providerData.insuranceProviders, ...modalInsuranceProviders])];
-
+        const allSpecialities = [... new Set([...treatmentApproaches, ...mainSpecialties])]
 
 
         const result = {
@@ -728,7 +728,7 @@ async function scrapeProviderData(provider, browserContext, srNo) {
             'Connect Link - LinkedIn': '',
             'Connect Link - Twitter': '',
             'Connect Link - Website': '',
-            'Main Specialties': mainSpecialties.join(','),
+            'Main Specialties': allSpecialities.join(','),
             'Accepted IPs': allProviders.join(','),
             'Appointments in 7 Days': 0,
             'NPI Number': '',
